@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ne Vorobey</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_letters">Введите буквы</string>
+    <string name="enter_all_letters">Введите все буквы</string>
+    <string name="ne_vorobey_welcome">Слово - НЕ ВОРОБЕЙ…</string>
+    <string name="ne_vorobey_descr">Проверь свой словарный запас - угадай слово за 6 попыток</string>
+    <string name="choose_level">Выберите сложность:</string>
+    <string name="easy_4">4 буквы</string>
+    <string name="medium_5">5 букв</string>
+    <string name="hard_6">6 букв</string>
+    <string name="letter_1">А</string>
+    <string name="letter_2">Б</string>
+    <string name="letter_3">В</string>
+    <string name="letter_4">Г</string>
+    <string name="letter_5">Д</string>
+    <string name="letter_6">Е</string>
+    <string name="letter_7">Ё</string>
+    <string name="letter_8">Ж</string>
+    <string name="letter_9">З</string>
+    <string name="letter_10">И</string>
+    <string name="letter_11">Й</string>
+    <string name="letter_12">К</string>
+    <string name="letter_13">Л</string>
+    <string name="letter_14">М</string>
+    <string name="letter_15">Н</string>
+    <string name="letter_16">О</string>
+    <string name="letter_17">П</string>
+    <string name="letter_18">Р</string>
+    <string name="letter_19">С</string>
+    <string name="letter_20">Т</string>
+    <string name="letter_21">У</string>
+    <string name="letter_22">Ф</string>
+    <string name="letter_23">Х</string>
+    <string name="letter_24">Ц</string>
+    <string name="letter_25">Ч</string>
+    <string name="letter_26">Ш</string>
+    <string name="letter_27">Щ</string>
+    <string name="letter_28">Ъ</string>
+    <string name="letter_29">Ы</string>
+    <string name="letter_30">Ь</string>
+    <string name="letter_31">Э</string>
+    <string name="letter_32">Ю</string>
+    <string name="letter_33">Я</string>
+</resources>

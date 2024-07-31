@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="keyboard_cell_text_default" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/color_five</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="cell_text_input" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/color_five</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="cell_text_regular" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/color_four</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="welcome_title" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/color_five</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="welcome_description" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/color_five</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="choose_level" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/color_four</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="easy_level" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/color_green</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="medium_level" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/color_yellow</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="hard_level" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/color_red</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

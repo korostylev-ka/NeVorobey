@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.NeVorobey" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.NeVorobey" parent="Base.Theme.NeVorobey" />
+    <style name="Widget.AppTheme.IconButtonOk" parent="Widget.Material3.Button.IconButton">
+        <item name="background">@drawable/ic_ok_button_48dp</item>
+        <item name="android:enabled">true</item>
+
+
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+
+    </style>
+
+    <style name="Widget.AppTheme.StartButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">@color/color_four</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingStart">@dimen/icon_button_padding</item>
+        <item name="android:paddingEnd">@dimen/icon_button_padding</item>
+        <item name="android:minWidth">@dimen/icon_button_min_size</item>
+        <item name="android:minHeight">@dimen/icon_button_min_size</item>
+    </style>
+</resources>
