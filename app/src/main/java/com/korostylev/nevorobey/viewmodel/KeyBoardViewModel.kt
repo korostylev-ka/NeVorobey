@@ -1,5 +1,6 @@
 package com.korostylev.nevorobey.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,11 +8,12 @@ import androidx.lifecycle.ViewModel
 class KeyBoardViewModel: ViewModel() {
 
     fun getTheLetterFromKeyboard(letter: String): String {
-        keyboardText_.value = letter
+        Log.d("vorobey", letter)
+        _keyboardText.value = letter
         return letter
     }
     private var emptyText = ""
-    private val keyboardText_: MutableLiveData<String> = MutableLiveData(emptyText)
+    private val _keyboardText: MutableLiveData<String> = MutableLiveData(emptyText)
     val keyboardText: LiveData<String>
-            get() = keyboardText_
+            get() = _keyboardText
 }

@@ -12,7 +12,7 @@ import com.korostylev.nevorobey.ui.FiveLettersFragment
 import com.korostylev.nevorobey.ui.KeyboardAction
 import com.korostylev.nevorobey.ui.StartFragment
 
-class MainActivity : AppCompatActivity(), KeyboardAction {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,8 +25,4 @@ class MainActivity : AppCompatActivity(), KeyboardAction {
         }
     }
 
-    override fun pressed(text: String) {
-
-        FiveLettersFragment.getTheLetterFromKeyboard(text)
-    }
 }

@@ -14,6 +14,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_11">
@@ -24,6 +25,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_24">
@@ -34,6 +36,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_21">
@@ -44,6 +47,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_12">
@@ -54,6 +58,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_6">
@@ -64,6 +69,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_15">
@@ -74,6 +80,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_4">
@@ -84,6 +91,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_26">
@@ -94,6 +102,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_27">
@@ -104,6 +113,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_9">
@@ -114,6 +124,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_23">
@@ -129,6 +140,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_22">
@@ -139,6 +151,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_29">
@@ -149,6 +162,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_3">
@@ -159,6 +173,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_1">
@@ -169,6 +184,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_17">
@@ -179,6 +195,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_18">
@@ -189,6 +206,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_16">
@@ -199,6 +217,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_13">
@@ -209,6 +228,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_5">
@@ -219,6 +239,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_8">
@@ -229,6 +250,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_31">
@@ -244,6 +266,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_7">
@@ -254,6 +277,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_33">
@@ -264,6 +288,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_25">
@@ -274,6 +299,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_19">
@@ -284,6 +310,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_14">
@@ -294,6 +321,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_10">
@@ -304,6 +332,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_20">
@@ -314,6 +343,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_30">
@@ -324,6 +354,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_2">
@@ -334,6 +365,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_32">
@@ -344,6 +376,7 @@
             android:layout_width="@dimen/keyboard_cell_size"
             android:layout_margin="@dimen/padding"
             android:gravity="center"
+            android:focusableInTouchMode="false"
             style="@style/keyboard_cell_text_default"
             android:background="@drawable/keyboard_cell_default"
             android:text="@string/letter_28">
