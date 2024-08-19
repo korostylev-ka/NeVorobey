@@ -62,27 +62,7 @@ class KeyboardFragment : Fragment() {
     private lateinit var letter31: TextView
     private lateinit var letter32: TextView
     private lateinit var letter33: TextView
-    private var keyboardAction: KeyboardAction? = null
-    private var neVorobeyPresenter: NeVorobeyPresenter? = null
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            keyboardAction = context as KeyboardAction?
-            neVorobeyPresenter = context as NeVorobeyPresenter?
-        } catch (e: Exception) {
-            Log.d("vorobey", e.message.toString())
-        }
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        keyboardAction = null
-        neVorobeyPresenter = null
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +75,7 @@ class KeyboardFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentKeyboardBinding.inflate(layoutInflater)
         letter1 = binding.letter1
         letter2 = binding.letter2
@@ -116,11 +96,13 @@ class KeyboardFragment : Fragment() {
         letter17 = binding.letter17
         letter18 = binding.letter18
         letter19 = binding.letter19
-        letter20 = binding.letter21
+        letter20 = binding.letter20
+        letter21 = binding.letter21
         letter22 = binding.letter22
         letter23 = binding.letter23
         letter24 = binding.letter24
-        letter25 = binding.letter26
+        letter25 = binding.letter25
+        letter26 = binding.letter26
         letter27 = binding.letter27
         letter28 = binding.letter28
         letter29 = binding.letter29
@@ -129,13 +111,107 @@ class KeyboardFragment : Fragment() {
         letter32 = binding.letter32
         letter33 = binding.letter33
         letter1.setOnClickListener {
-//            keyboardAction?.pressed(letter1.text.toString())
+            Log.d("vorobey", "pressed")
             keyBoardViewModel.getTheLetterFromKeyboard(letter1.text.toString())
+
+        }
+        letter2.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter2.text.toString())
+        }
+        letter3.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter3.text.toString())
         }
         letter4.setOnClickListener {
-
-            keyboardAction?.pressed(letter4.text.toString())
+            keyBoardViewModel.getTheLetterFromKeyboard(letter4.text.toString())
         }
+        letter5.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter5.text.toString())
+        }
+        letter6.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter6.text.toString())
+        }
+        letter7.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter7.text.toString())
+        }
+        letter8.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter8.text.toString())
+        }
+        letter9.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter9.text.toString())
+        }
+        letter10.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter10.text.toString())
+        }
+        letter11.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter11.text.toString())
+        }
+        letter12.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter12.text.toString())
+        }
+        letter13.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter13.text.toString())
+        }
+        letter14.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter14.text.toString())
+        }
+        letter15.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter15.text.toString())
+        }
+        letter16.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter16.text.toString())
+        }
+        letter17.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter17.text.toString())
+        }
+        letter18.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter18.text.toString())
+        }
+        letter19.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter19.text.toString())
+        }
+        letter20.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter20.text.toString())
+        }
+        letter21.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter21.text.toString())
+        }
+        letter22.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter22.text.toString())
+        }
+        letter23.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter23.text.toString())
+        }
+        letter24.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter24.text.toString())
+        }
+        letter25.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter25.text.toString())
+        }
+        letter26.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter26.text.toString())
+        }
+        letter27.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter27.text.toString())
+        }
+        letter28.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter28.text.toString())
+        }
+        letter29.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter29.text.toString())
+        }
+        letter30.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter30.text.toString())
+        }
+        letter31.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter31.text.toString())
+        }
+        letter32.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter32.text.toString())
+        }
+        letter33.setOnClickListener {
+            keyBoardViewModel.getTheLetterFromKeyboard(letter33.text.toString())
+        }
+
         // Inflate the layout for this fragment
         return binding.root
     }

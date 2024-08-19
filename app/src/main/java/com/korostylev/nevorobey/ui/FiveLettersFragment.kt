@@ -41,7 +41,6 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private var currentCell3: TextView? = null
     private var currentCell4: TextView? = null
     private var currentCell5: TextView? = null
-
     private lateinit var cell11: TextView
     private lateinit var cell12: TextView
     private lateinit var cell13: TextView
@@ -73,10 +72,10 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var cell64: TextView
     private lateinit var cell65: TextView
     private lateinit var letter1: TextView
-    private lateinit var letter2: EditText
-    private lateinit var letter3: EditText
-    private lateinit var letter4: EditText
-    private lateinit var letter5: EditText
+    private lateinit var letter2: TextView
+    private lateinit var letter3: TextView
+    private lateinit var letter4: TextView
+    private lateinit var letter5: TextView
     private val presenter: NeVorobeyPresenter =  NeVorobeyPresenterImpl(this)
 //    private val currentRow: Int
 //        get() = presenter.getCurrentRow()
@@ -97,7 +96,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentFiveLettersBinding.inflate(layoutInflater)
         val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
         if (currentFragment == null) {
@@ -143,7 +142,14 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         letter5 = binding.input5
 
         keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
-            letter1.text = it
+            when (currentLetterPosition) {
+                1 -> letter1.text = it
+                2 -> letter2.text = it
+                3 -> letter3.text = it
+                4 -> letter4.text = it
+                5 -> letter5.text = it
+            }
+            currentLetterPosition++
         }
 
         fun switchButtons() {
@@ -400,10 +406,10 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
     fun clearInput() {
 //        letter1.text.clear()
-        letter2.text.clear()
-        letter3.text.clear()
-        letter4.text.clear()
-        letter5.text.clear()
+//        letter2.text.clear()
+//        letter3.text.clear()
+//        letter4.text.clear()
+//        letter5.text.clear()
     }
 
     @SuppressLint("ResourceAsColor")

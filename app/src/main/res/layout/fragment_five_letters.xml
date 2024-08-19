@@ -345,7 +345,6 @@
             android:id="@+id/table_input_row">
             <TextView
                 android:id="@+id/input_1"
-                android:inputType="textCapWords"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
                 android:layout_height="@dimen/cell_size"
@@ -354,9 +353,8 @@
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
             </TextView>
-            <EditText
+            <TextView
                 android:id="@+id/input_2"
-                android:inputType="textCapWords"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
                 android:layout_height="@dimen/cell_size"
@@ -364,10 +362,9 @@
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
-            </EditText>
-            <EditText
+            </TextView>
+            <TextView
                 android:id="@+id/input_3"
-                android:inputType="textCapWords"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
                 android:layout_height="@dimen/cell_size"
@@ -375,10 +372,9 @@
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
-            </EditText>
-            <EditText
+            </TextView>
+            <TextView
                 android:id="@+id/input_4"
-                android:inputType="textCapWords"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
                 android:layout_height="@dimen/cell_size"
@@ -386,10 +382,9 @@
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
-            </EditText>
-            <EditText
+            </TextView>
+            <TextView
                 android:id="@+id/input_5"
-                android:inputType="textCapWords"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
                 android:layout_height="@dimen/cell_size"
@@ -397,7 +392,7 @@
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
-            </EditText>
+            </TextView>
 
         </TableRow>
 
