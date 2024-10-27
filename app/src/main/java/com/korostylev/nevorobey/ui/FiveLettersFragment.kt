@@ -9,11 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.activityViewModels
 import com.korostylev.nevorobey.R
 import com.korostylev.nevorobey.databinding.FragmentFiveLettersBinding
@@ -26,7 +23,20 @@ import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private var currentLetterPosition = 0
+private const val BACKSPACE = "backspace"
+private const val ROW_ONE = 1
+private const val ROW_TWO = 2
+private const val ROW_THREE = 3
+private const val ROW_FOUR = 4
+private const val ROW_FIVE = 5
+private const val ROW_SIX = 6
+private const val FIRST_LETTER_POSITION = 1
+private const val SECOND_LETTER_POSITION = 2
+private const val THIRD_LETTER_POSITION = 3
+private const val FOURTH_LETTER_POSITION = 4
+private const val FIFTH_LETTER_POSITION = 5
+private const val SIXTH_LETTER_POSITION = 6
+
 /**
  * A simple [Fragment] subclass.
  * Use the [FiveLettersFragment.newInstance] factory method to
@@ -36,6 +46,19 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var currentLetterPosition = 0
+        set(value)  {
+            if (value < 2) {
+                field = 1
+            } else {
+                if (value > 6) {
+                    field = 6
+                } else {
+                    field = value
+                }
+            }
+        }
+
     private var currentCell1: TextView? =null
     private var currentCell2: TextView? = null
     private var currentCell3: TextView? = null
@@ -77,13 +100,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var letter4: TextView
     private lateinit var letter5: TextView
     private val presenter: NeVorobeyPresenter =  NeVorobeyPresenterImpl(this)
-//    private val currentRow: Int
-//        get() = presenter.getCurrentRow()
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
-
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,14 +159,27 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         letter5 = binding.input5
 
         keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
-            when (currentLetterPosition) {
-                1 -> letter1.text = it
-                2 -> letter2.text = it
-                3 -> letter3.text = it
-                4 -> letter4.text = it
-                5 -> letter5.text = it
+
+            if (it == BACKSPACE) {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = ""
+                    SECOND_LETTER_POSITION -> letter1.text = ""
+                    THIRD_LETTER_POSITION -> letter2.text = ""
+                    FOURTH_LETTER_POSITION -> letter3.text = ""
+                    FIFTH_LETTER_POSITION -> letter4.text = ""
+                    SIXTH_LETTER_POSITION -> letter5.text = ""
+                }
+                currentLetterPosition--
+            } else {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = it
+                    SECOND_LETTER_POSITION -> letter2.text = it
+                    THIRD_LETTER_POSITION -> letter3.text = it
+                    FOURTH_LETTER_POSITION -> letter4.text = it
+                    FIFTH_LETTER_POSITION -> letter5.text = it
+                }
+                currentLetterPosition++
             }
-            currentLetterPosition++
         }
 
         fun switchButtons() {
@@ -167,51 +197,15 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             }
         }
 
-
-
-
-
-        val inputTextWatcher = object : TextWatcher {
-            var position = 0
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                position = p1
-
-
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                p0?.let { it ->
-                    if (it.length == 1 && it.toString().all { it.isLetter() }) {
-                        p0.delete(position, position + 1)
-                    }
-//                    if (it.length == 1 && it.toString().uppercase() in "A".."Z") {
-//                        TODO()
-//                    }
-                    if (it.length > 1) {
-
-                        p0.delete(position, position + 1)
-                    }
-                    switchButtons()
-                }
-            }
-        }
-
         val inputTextWatcherLetterOne = object : TextWatcher {
+
             var position = 0
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 position = p1
-
-
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -360,7 +354,6 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         binding.buttonOk.setOnClickListener {
             val word = getTheWordFromLetters()
             presenter.checkWord(word)
-            Log.d("vorobey", word)
         }
         binding.buttonCancel.setOnClickListener {
             presenter.clearInputFields()
@@ -371,55 +364,36 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FiveLettersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance() =
             FiveLettersFragment()
 
-        fun getTheLetterFromKeyboard(text: String) {
-            when (currentLetterPosition) {
-                0 -> {
-
-                }
-            }
-
-
-            Log.d("vorobey", text)
-        }
     }
-
 
     fun getTheWordFromLetters(): String {
         val word = letter1.text.toString() + letter2.text.toString() + letter3.text.toString() +
                 letter4.text.toString() + letter5.text.toString()
         return word
-
     }
 
     fun clearInput() {
-//        letter1.text.clear()
-//        letter2.text.clear()
-//        letter3.text.clear()
-//        letter4.text.clear()
-//        letter5.text.clear()
+        letter1.text = ""
+        letter2.text = ""
+        letter3.text = ""
+        letter4.text = ""
+        letter5.text = ""
+        currentLetterPosition = 1
     }
 
     @SuppressLint("ResourceAsColor")
     fun changeViewBackground(textView: TextView, value: Int?) {
         when (value) {
-            1 -> {
+            Answer.LETTER_POSITION_GUESSED -> {
                 textView.setBackgroundResource(R.drawable.cell_text_view_a)
                 textView.setTextColor(R.color.color_grey)
             }
-            0 -> {
+            Answer.LETTER_IS_EXIST -> {
                 textView.setBackgroundResource(R.drawable.cell_text_view_b)
                 textView.setTextColor(R.color.color_grey)
             }
@@ -429,7 +403,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
     fun changeCurrentCells(currentRow: Int) {
         when (currentRow) {
-            1 -> {
+            ROW_ONE -> {
                 currentCell1 = cell11
                 currentCell2 = cell12
                 currentCell3 = cell13
@@ -437,7 +411,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 currentCell5 = cell15
 
             }
-            2 -> {
+            ROW_TWO -> {
                 currentCell1 = cell21
                 currentCell2 = cell22
                 currentCell3 = cell23
@@ -445,7 +419,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 currentCell5 = cell25
 
             }
-            3 -> {
+            ROW_THREE -> {
                 currentCell1 = cell31
                 currentCell2 = cell32
                 currentCell3 = cell33
@@ -453,7 +427,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 currentCell5 = cell35
 
             }
-            4 -> {
+            ROW_FOUR -> {
                 currentCell1 = cell41
                 currentCell2 = cell42
                 currentCell3 = cell43
@@ -461,7 +435,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 currentCell5 = cell45
 
             }
-            5 -> {
+            ROW_FIVE -> {
                 currentCell1 = cell51
                 currentCell2 = cell52
                 currentCell3 = cell53
@@ -469,7 +443,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 currentCell5 = cell55
 
             }
-            6 -> {
+            ROW_SIX -> {
                 currentCell1 = cell61
                 currentCell2 = cell62
                 currentCell3 = cell63
@@ -488,12 +462,13 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         }
     }
 
-
-
-
-
     override fun checkWord(answer: Answer) {
         val letters = answer.getLetters()
+        for (item in letters) {
+            if (item != null) {
+                keyBoardViewModel.changeLetterBackground(item.first, item.second)
+            }
+        }
         val letterOne = letter1.text.toString()
         val letterTwo = letter2.text.toString()
         val letterThree = letter3.text.toString()
@@ -507,30 +482,25 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         }
         changeCurrentCells(answer.getCurrentRow())
         currentCell1?.let {
-            changeViewBackground(it, answer.getLetters()[0])
+            changeViewBackground(it, answer.getLetters()[0]?.second)
             it.text = letterOne
         }
         currentCell2?.let {
-            changeViewBackground(it, answer.getLetters()[1])
+            changeViewBackground(it, answer.getLetters()[1]?.second)
             it.text = letterTwo
         }
         currentCell3?.let {
-            changeViewBackground(it, answer.getLetters()[2])
+            changeViewBackground(it, answer.getLetters()[2]?.second)
             it.text = letterThree
         }
         currentCell4?.let {
-            changeViewBackground(it, answer.getLetters()[3])
+            changeViewBackground(it, answer.getLetters()[3]?.second)
             it.text = letterFour
         }
         currentCell5?.let {
-            changeViewBackground(it, answer.getLetters()[4])
+            changeViewBackground(it, answer.getLetters()[4]?.second)
             it.text = letterFive
         }
-//        currentCell1?.text= letterOne
-//        currentCell2?.text= letterTwo
-//        currentCell3?.text= letterThree
-//        currentCell4?.text= letterFour
-//        currentCell5?.text= letterFive
         clearInput()
     }
 
@@ -541,11 +511,5 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     override fun pressed(text: String) {
         Log.d("vorobey", "text5")
     }
-
-//    override fun pressed() {
-//        Toast.makeText(context, "PRESSED", Toast.LENGTH_LONG)
-//            .show()
-//    }
-
 
 }

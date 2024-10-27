@@ -30,6 +30,10 @@ class StartFragment : Fragment() {
     fun moveToFragment(selectedLevel: Level) {
         when (selectedLevel) {
             Level.EASY -> {
+                val fragment = FourLettersFragment.newInstance()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment, null)
+                    .commit()
 
             }
             Level.MEDIUM -> {
@@ -39,6 +43,10 @@ class StartFragment : Fragment() {
                     .commit()
             }
             Level.HARD -> {
+                val fragment = SixLettersFragment.newInstance()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment, null)
+                    .commit()
 
             }
         }
