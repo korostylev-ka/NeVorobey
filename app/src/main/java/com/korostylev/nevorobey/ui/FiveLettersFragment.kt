@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.korostylev.nevorobey.R
 import com.korostylev.nevorobey.databinding.FragmentFiveLettersBinding
+import com.korostylev.nevorobey.databinding.FragmentFourLettersBinding
 import com.korostylev.nevorobey.dto.Answer
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
@@ -43,6 +44,9 @@ private const val SIXTH_LETTER_POSITION = 6
  * create an instance of this fragment.
  */
 class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
+    private var _binding: FragmentFiveLettersBinding? = null
+    private val binding: FragmentFiveLettersBinding
+        get() = _binding ?: throw RuntimeException("FragmentFiveLettersBinding is null")
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -114,14 +118,8 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFiveLettersBinding.inflate(layoutInflater)
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
-        if (currentFragment == null) {
-            val fragment = KeyboardFragment.newInstance()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.keyboard, fragment, null)
-                .commit()
-        }
+        _binding = FragmentFiveLettersBinding.inflate(inflater, container, false)
+        addKeyboardFragment()
         cell11 = binding.cell11
         cell12 = binding.cell12
         cell13 = binding.cell13
@@ -157,46 +155,48 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         letter3 = binding.input3
         letter4 = binding.input4
         letter5 = binding.input5
-
         keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
-
-            if (it == BACKSPACE) {
-                when (currentLetterPosition) {
-                    FIRST_LETTER_POSITION -> letter1.text = ""
-                    SECOND_LETTER_POSITION -> letter1.text = ""
-                    THIRD_LETTER_POSITION -> letter2.text = ""
-                    FOURTH_LETTER_POSITION -> letter3.text = ""
-                    FIFTH_LETTER_POSITION -> letter4.text = ""
-                    SIXTH_LETTER_POSITION -> letter5.text = ""
-                }
-                currentLetterPosition--
-            } else {
-                when (currentLetterPosition) {
-                    FIRST_LETTER_POSITION -> letter1.text = it
-                    SECOND_LETTER_POSITION -> letter2.text = it
-                    THIRD_LETTER_POSITION -> letter3.text = it
-                    FOURTH_LETTER_POSITION -> letter4.text = it
-                    FIFTH_LETTER_POSITION -> letter5.text = it
-                }
-                currentLetterPosition++
-            }
+            keyboardTextObserve(it)
         }
-
-        fun switchButtons() {
-            if (letter1.text.isNotEmpty() && letter2.text.isNotEmpty() && letter3.text.isNotEmpty() &&
-                letter4.text.isNotEmpty() && letter5.text.isNotEmpty()) {
-                binding.buttonOk.isEnabled = true
-            } else {
-                binding.buttonOk.isEnabled = false
-            }
-            if (letter1.text.isNotEmpty() || letter2.text.isNotEmpty() || letter3.text.isNotEmpty() ||
-                letter4.text.isNotEmpty() || letter5.text.isNotEmpty()) {
-                binding.buttonCancel.isEnabled = true
-            } else {
-                binding.buttonCancel.isEnabled = false
-            }
+        addTextWatchers()
+        binding.buttonOk.isEnabled = false
+        binding.buttonCancel.isEnabled = false
+        binding.buttonOk.setOnClickListener {
+            val word = getTheWordFromLetters()
+            presenter.checkWord(word)
         }
+        binding.buttonCancel.setOnClickListener {
+            presenter.clearInputFields()
+        }
+        return binding.root
+    }
 
+    private fun addKeyboardFragment() {
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
+        if (currentFragment == null) {
+            val fragment = KeyboardFragment.newInstance()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.keyboard, fragment, null)
+                .commit()
+        }
+    }
+
+    fun switchButtons() {
+        if (letter1.text.isNotEmpty() && letter2.text.isNotEmpty() && letter3.text.isNotEmpty() &&
+            letter4.text.isNotEmpty() && letter5.text.isNotEmpty()) {
+            binding.buttonOk.isEnabled = true
+        } else {
+            binding.buttonOk.isEnabled = false
+        }
+        if (letter1.text.isNotEmpty() || letter2.text.isNotEmpty() || letter3.text.isNotEmpty() ||
+            letter4.text.isNotEmpty() || letter5.text.isNotEmpty()) {
+            binding.buttonCancel.isEnabled = true
+        } else {
+            binding.buttonCancel.isEnabled = false
+        }
+    }
+
+    private fun addTextWatchers() {
         val inputTextWatcherLetterOne = object : TextWatcher {
 
             var position = 0
@@ -342,32 +342,44 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 }
             }
         }
-
-
         binding.input1.addTextChangedListener(inputTextWatcherLetterOne)
         binding.input2.addTextChangedListener(inputTextWatcherLetterTwo)
         binding.input3.addTextChangedListener(inputTextWatcherLetterThree)
         binding.input4.addTextChangedListener(inputTextWatcherLetterFour)
         binding.input5.addTextChangedListener(inputTextWatcherLetterFive)
-        binding.buttonOk.isEnabled = false
-        binding.buttonCancel.isEnabled = false
-        binding.buttonOk.setOnClickListener {
-            val word = getTheWordFromLetters()
-            presenter.checkWord(word)
-        }
-        binding.buttonCancel.setOnClickListener {
-            presenter.clearInputFields()
-        }
-
-
-        return binding.root
     }
+
+    private fun keyboardTextObserve(text: String) {
+        if (text == BACKSPACE) {
+            when (currentLetterPosition) {
+                FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
+                FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
+                FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
+                SIXTH_LETTER_POSITION -> letter5.text = EMPTY_TEXT
+            }
+            currentLetterPosition--
+        } else {
+            when (currentLetterPosition) {
+                FIRST_LETTER_POSITION -> letter1.text = text
+                SECOND_LETTER_POSITION -> letter2.text = text
+                THIRD_LETTER_POSITION -> letter3.text = text
+                FOURTH_LETTER_POSITION -> letter4.text = text
+                FIFTH_LETTER_POSITION -> letter5.text = text
+            }
+            currentLetterPosition++
+        }
+    }
+
 
     companion object {
 
         @JvmStatic
         fun newInstance() =
             FiveLettersFragment()
+
+        private const val EMPTY_TEXT = ""
 
     }
 
