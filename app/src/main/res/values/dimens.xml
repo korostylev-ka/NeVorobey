@@ -2,10 +2,12 @@
 <resources>
     <dimen name="cell_size">56dp</dimen>
     <dimen name="keyboard_cell_size">28dp</dimen>
+    <dimen name="keyboard_backspace_size">64dp</dimen>
     <dimen name="common">16dp</dimen>
     <dimen name="table_wid">16dp</dimen>
     <dimen name="cell_margin">4dp</dimen>
     <dimen name="padding">4dp</dimen>
+    <dimen name="keyboard_padding">2dp</dimen>
     <dimen name="icon_button_padding">12dp</dimen>
     <dimen name="icon_button_min_size">32dp</dimen>
 </resources>
