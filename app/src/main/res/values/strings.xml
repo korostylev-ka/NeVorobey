@@ -43,7 +43,7 @@
     <string name="letter_31">Э</string>
     <string name="letter_32">Ю</string>
     <string name="letter_33">Я</string>
-
+    <string name="backspace_button">⌫</string>
 
 
 </resources>

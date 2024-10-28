@@ -55,15 +55,6 @@
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
             </TextView>
-            <TextView
-                android:layout_margin="@dimen/cell_margin"
-                android:id="@+id/cell_1_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
-                android:gravity="center"
-                style="@style/cell_text_regular"
-                android:background="@drawable/cell_text_view">
-            </TextView>
         </TableRow>
 
         <TableRow
@@ -100,15 +91,6 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_2_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
-                android:gravity="center"
-                style="@style/cell_text_regular"
-                android:background="@drawable/cell_text_view">
-            </TextView>
-            <TextView
-                android:layout_margin="@dimen/cell_margin"
-                android:id="@+id/cell_2_5"
                 android:layout_height="@dimen/cell_size"
                 android:layout_width="@dimen/cell_size"
                 android:gravity="center"
@@ -157,15 +139,6 @@
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
             </TextView>
-            <TextView
-                android:layout_margin="@dimen/cell_margin"
-                android:id="@+id/cell_3_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
-                android:gravity="center"
-                style="@style/cell_text_regular"
-                android:background="@drawable/cell_text_view">
-            </TextView>
         </TableRow>
 
         <TableRow
@@ -202,15 +175,6 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_4_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
-                android:gravity="center"
-                style="@style/cell_text_regular"
-                android:background="@drawable/cell_text_view">
-            </TextView>
-            <TextView
-                android:layout_margin="@dimen/cell_margin"
-                android:id="@+id/cell_4_5"
                 android:layout_height="@dimen/cell_size"
                 android:layout_width="@dimen/cell_size"
                 android:gravity="center"
@@ -259,15 +223,6 @@
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
             </TextView>
-            <TextView
-                android:layout_margin="@dimen/cell_margin"
-                android:id="@+id/cell_5_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
-                android:gravity="center"
-                style="@style/cell_text_regular"
-                android:background="@drawable/cell_text_view">
-            </TextView>
         </TableRow>
 
         <TableRow
@@ -304,15 +259,6 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_6_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
-                android:gravity="center"
-                style="@style/cell_text_regular"
-                android:background="@drawable/cell_text_view">
-            </TextView>
-            <TextView
-                android:layout_margin="@dimen/cell_margin"
-                android:id="@+id/cell_6_5"
                 android:layout_height="@dimen/cell_size"
                 android:layout_width="@dimen/cell_size"
                 android:gravity="center"
@@ -378,16 +324,6 @@
             </TextView>
             <TextView
                 android:id="@+id/input_4"
-                android:maxLength="1"
-                android:layout_margin="@dimen/cell_margin"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
-                android:gravity="center"
-                style="@style/cell_text_input"
-                android:background="@drawable/cell_input_edit_text">
-            </TextView>
-            <TextView
-                android:id="@+id/input_5"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
                 android:layout_height="@dimen/cell_size"
