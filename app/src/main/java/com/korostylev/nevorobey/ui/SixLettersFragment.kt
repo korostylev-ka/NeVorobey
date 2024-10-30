@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.korostylev.nevorobey.R
+import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentSixLettersBinding
 import com.korostylev.nevorobey.dto.Answer
+import com.korostylev.nevorobey.entity.ActiveGameEntity
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
@@ -96,8 +98,13 @@ class SixLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var letter4: TextView
     private lateinit var letter5: TextView
     private lateinit var letter6: TextView
-    private val presenter: NeVorobeyPresenter =  NeVorobeyPresenterImpl(this)
+    private lateinit var presenter: NeVorobeyPresenter
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.HARD)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,6 +113,21 @@ class SixLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
         _binding = FragmentSixLettersBinding.inflate(inflater, container, false)
         addKeyboardFragment()
+
+
+        addTextWatchers()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        keyboardTextObserve()
+        bindViews()
+        addTextWatchers()
+        setClickListeners()
+    }
+
+    private fun bindViews() {
         cell11 = binding.cell11
         cell12 = binding.cell12
         cell13 = binding.cell13
@@ -148,12 +170,18 @@ class SixLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         letter4 = binding.input4
         letter5 = binding.input5
         letter6 = binding.input6
+        binding.buttonOk.isEnabled = false
+        binding.buttonCancel.isEnabled = false
+    }
 
-        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
-            keyboardTextObserve(it)
+    private fun setClickListeners() {
+        binding.buttonOk.setOnClickListener {
+            val word = getTheWordFromLetters()
+            presenter.checkWord(word)
         }
-        addTextWatchers()
-        return binding.root
+        binding.buttonCancel.setOnClickListener {
+            presenter.clearInputFields()
+        }
     }
 
     private fun addKeyboardFragment() {
@@ -364,29 +392,48 @@ class SixLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         binding.input6.addTextChangedListener(inputTextWatcherLetterSix)
     }
 
-    private fun keyboardTextObserve(text: String) {
-        if (text == BACKSPACE) {
-            when (currentLetterPosition) {
-                FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
-                SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
-                THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
-                FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
-                FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
-                SIXTH_LETTER_POSITION -> letter5.text = EMPTY_TEXT
-                SEVENTH_LETTER_POSITION -> letter6.text = EMPTY_TEXT
+    private fun keyboardTextObserve() {
+        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
+            if (it == BACKSPACE) {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
+                    FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
+                    FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
+                    SIXTH_LETTER_POSITION -> letter5.text = EMPTY_TEXT
+                    SEVENTH_LETTER_POSITION -> letter6.text = EMPTY_TEXT
+                }
+                currentLetterPosition--
+            } else {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = it
+                    SECOND_LETTER_POSITION -> letter2.text = it
+                    THIRD_LETTER_POSITION -> letter3.text = it
+                    FOURTH_LETTER_POSITION -> letter4.text = it
+                    FIFTH_LETTER_POSITION -> letter5.text = it
+                    SIXTH_LETTER_POSITION -> letter6.text = it
+                }
+                currentLetterPosition++
             }
-            currentLetterPosition--
-        } else {
-            when (currentLetterPosition) {
-                FIRST_LETTER_POSITION -> letter1.text = text
-                SECOND_LETTER_POSITION -> letter2.text = text
-                THIRD_LETTER_POSITION -> letter3.text = text
-                FOURTH_LETTER_POSITION -> letter4.text = text
-                FIFTH_LETTER_POSITION -> letter5.text = text
-                SIXTH_LETTER_POSITION -> letter6.text = text
-            }
-            currentLetterPosition++
         }
+
+    }
+
+    private fun getTheWordFromLetters(): String {
+        val word = letter1.text.toString() + letter2.text.toString() + letter3.text.toString() +
+                letter4.text.toString() + letter5.text.toString() + letter6.text.toString()
+        return word
+    }
+
+    private fun clearInput() {
+        letter1.text = EMPTY_TEXT
+        letter2.text = EMPTY_TEXT
+        letter3.text = EMPTY_TEXT
+        letter4.text = EMPTY_TEXT
+        letter5.text = EMPTY_TEXT
+        letter6.text = EMPTY_TEXT
+        currentLetterPosition = 1
     }
 
     companion object {

@@ -1,12 +1,14 @@
 package com.korostylev.nevorobey.model
 
 import android.util.Log
+import com.korostylev.nevorobey.dao.ActiveGameDao
 import com.korostylev.nevorobey.dto.Answer
 import com.korostylev.nevorobey.dto.Answer.Companion.LETTER_IS_EXIST
 import com.korostylev.nevorobey.dto.Answer.Companion.LETTER_IS_NOT_EXIST
 import com.korostylev.nevorobey.dto.Letters
+import com.korostylev.nevorobey.entity.ActiveGameEntity
 
-class NeVorobeyModelImpl: NeVorobeyModel {
+class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao): NeVorobeyModel {
     private var wordSize = 5
     private var answer = Answer(wordSize)
     private var currentRow: Int = 1
@@ -73,6 +75,14 @@ class NeVorobeyModelImpl: NeVorobeyModel {
         }
         answer.increaseCurrentRow()
         return answer
+    }
+
+    override fun saveCurrentGame(activeGameEntity: ActiveGameEntity) {
+        activeGameDao.insert(activeGameEntity)
+    }
+
+    override fun deleteCurrentGame() {
+        TODO("Not yet implemented")
     }
 
 }

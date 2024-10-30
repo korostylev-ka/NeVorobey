@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.korostylev.nevorobey.R
+import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentFourLettersBinding
 import com.korostylev.nevorobey.dto.Answer
+import com.korostylev.nevorobey.entity.ActiveGameEntity
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
+import kotlin.math.E
 
 private const val BACKSPACE = "backspace"
 private const val ROW_ONE = 1
@@ -81,8 +84,13 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var letter2: TextView
     private lateinit var letter3: TextView
     private lateinit var letter4: TextView
-    private val presenter: NeVorobeyPresenter =  NeVorobeyPresenterImpl(this)
+    private lateinit var presenter: NeVorobeyPresenter
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.EASY)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +98,29 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     ): View? {
         _binding = FragmentFourLettersBinding.inflate(inflater, container, false)
         addKeyboardFragment()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViews()
+        keyboardTextObserve()
+        addTextWatchers()
+        setClickListeners()
+    }
+
+    private fun setClickListeners() {
+        binding.buttonOk.setOnClickListener {
+            val word = getTheWordFromLetters()
+            presenter.checkWord(word)
+        }
+        binding.buttonCancel.setOnClickListener {
+            presenter.clearInputFields()
+        }
+    }
+
+    private fun bindViews() {
         cell11 = binding.cell11
         cell12 = binding.cell12
         cell13 = binding.cell13
@@ -118,13 +149,8 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         letter2 = binding.input2
         letter3 = binding.input3
         letter4 = binding.input4
-
-        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
-            keyboardTextObserve(it)
-        }
-        addTextWatchers()
-
-        return binding.root
+        binding.buttonOk.isEnabled = false
+        binding.buttonCancel.isEnabled = false
     }
 
     private fun addKeyboardFragment() {
@@ -278,25 +304,42 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         binding.input4.addTextChangedListener(inputTextWatcherLetterFour)
     }
 
-    private fun keyboardTextObserve(text: String) {
-        if (text == BACKSPACE) {
-            when (currentLetterPosition) {
-                FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
-                SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
-                THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
-                FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
-                FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
+    private fun keyboardTextObserve() {
+        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
+            if (it == BACKSPACE) {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
+                    FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
+                    FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
+                }
+                currentLetterPosition--
+            } else {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = it
+                    SECOND_LETTER_POSITION -> letter2.text = it
+                    THIRD_LETTER_POSITION -> letter3.text = it
+                    FOURTH_LETTER_POSITION -> letter4.text = it
+                }
+                currentLetterPosition++
             }
-            currentLetterPosition--
-        } else {
-            when (currentLetterPosition) {
-                FIRST_LETTER_POSITION -> letter1.text = text
-                SECOND_LETTER_POSITION -> letter2.text = text
-                THIRD_LETTER_POSITION -> letter3.text = text
-                FOURTH_LETTER_POSITION -> letter4.text = text
-            }
-            currentLetterPosition++
         }
+
+    }
+
+    private fun getTheWordFromLetters(): String {
+        val word = letter1.text.toString() + letter2.text.toString() + letter3.text.toString() +
+                letter4.text.toString()
+        return word
+    }
+
+    private fun clearInput() {
+        letter1.text = EMPTY_TEXT
+        letter2.text = EMPTY_TEXT
+        letter3.text = EMPTY_TEXT
+        letter4.text = EMPTY_TEXT
+        currentLetterPosition = 1
     }
 
     companion object {

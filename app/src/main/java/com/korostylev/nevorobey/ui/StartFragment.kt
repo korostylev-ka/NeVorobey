@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.korostylev.nevorobey.R
+import com.korostylev.nevorobey.dao.ActiveGameDao
 import com.korostylev.nevorobey.databinding.FragmentStartBinding
+import com.korostylev.nevorobey.db.NeVorobeyDB
 import com.korostylev.nevorobey.dto.Level
+import com.korostylev.nevorobey.entity.ActiveGameEntity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +24,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class StartFragment : Fragment() {
+    private lateinit var activeGameDao: ActiveGameDao
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -28,28 +32,44 @@ class StartFragment : Fragment() {
     private lateinit var startButton: ImageView
 
     fun moveToFragment(selectedLevel: Level) {
-        when (selectedLevel) {
-            Level.EASY -> {
-                val fragment = FourLettersFragment.newInstance()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment, null)
-                    .commit()
+        val currentGame = activeGameDao.getCurrentGame()
+        val selectedGameLevel = when (selectedLevel) {
+            Level.EASY -> ActiveGameEntity.EASY
+            Level.MEDIUM -> ActiveGameEntity.MEDIUM
+            Level.HARD -> ActiveGameEntity.HARD
+        }
+        if (currentGame == null) {
+            when (selectedLevel) {
+                Level.EASY -> {
+                    val fragment = FourLettersFragment.newInstance()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment, null)
+                        .commit()
 
-            }
-            Level.MEDIUM -> {
-                val fragment = FiveLettersFragment.newInstance()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment, null)
-                    .commit()
-            }
-            Level.HARD -> {
+                }
+                Level.MEDIUM -> {
+                    val fragment = FiveLettersFragment.newInstance()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment, null)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                Level.HARD -> {
                 val fragment = SixLettersFragment.newInstance()
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment, null)
                     .commit()
 
+                }
             }
+        } else {
+            showContinueDialog(currentGame.currentGameLevel, selectedGameLevel)
         }
+    }
+
+    private fun showContinueDialog(currentGameLevel: Int, selectedGameLevel: Int) {
+        val fragment = ContinueDialogFragment.newInstance(currentGameLevel, selectedGameLevel)
+        fragment.show(requireActivity().supportFragmentManager, null)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +78,7 @@ class StartFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        activeGameDao = NeVorobeyDB.getInstance(requireActivity()).activeGameDao
     }
 
     override fun onCreateView(

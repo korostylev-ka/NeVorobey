@@ -13,12 +13,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.korostylev.nevorobey.R
+import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentFiveLettersBinding
 import com.korostylev.nevorobey.databinding.FragmentFourLettersBinding
 import com.korostylev.nevorobey.dto.Answer
+import com.korostylev.nevorobey.entity.ActiveGameEntity
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
+import kotlin.math.E
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -103,7 +106,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var letter3: TextView
     private lateinit var letter4: TextView
     private lateinit var letter5: TextView
-    private val presenter: NeVorobeyPresenter =  NeVorobeyPresenterImpl(this)
+    private lateinit var presenter: NeVorobeyPresenter
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,6 +115,7 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.MEDIUM)
     }
 
     override fun onCreateView(
@@ -120,6 +124,30 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     ): View {
         _binding = FragmentFiveLettersBinding.inflate(inflater, container, false)
         addKeyboardFragment()
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViews()
+        keyboardTextObserve()
+        addTextWatchers()
+        setClickListeners()
+    }
+
+    private fun setClickListeners() {
+        binding.buttonOk.setOnClickListener {
+            val word = getTheWordFromLetters()
+            presenter.checkWord(word)
+        }
+        binding.buttonCancel.setOnClickListener {
+            presenter.clearInputFields()
+        }
+    }
+
+    private fun bindViews() {
         cell11 = binding.cell11
         cell12 = binding.cell12
         cell13 = binding.cell13
@@ -155,20 +183,8 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         letter3 = binding.input3
         letter4 = binding.input4
         letter5 = binding.input5
-        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
-            keyboardTextObserve(it)
-        }
-        addTextWatchers()
         binding.buttonOk.isEnabled = false
         binding.buttonCancel.isEnabled = false
-        binding.buttonOk.setOnClickListener {
-            val word = getTheWordFromLetters()
-            presenter.checkWord(word)
-        }
-        binding.buttonCancel.setOnClickListener {
-            presenter.clearInputFields()
-        }
-        return binding.root
     }
 
     private fun addKeyboardFragment() {
@@ -349,27 +365,30 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         binding.input5.addTextChangedListener(inputTextWatcherLetterFive)
     }
 
-    private fun keyboardTextObserve(text: String) {
-        if (text == BACKSPACE) {
-            when (currentLetterPosition) {
-                FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
-                SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
-                THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
-                FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
-                FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
-                SIXTH_LETTER_POSITION -> letter5.text = EMPTY_TEXT
+    private fun keyboardTextObserve() {
+        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
+            if (it == BACKSPACE) {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
+                    FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
+                    FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
+                    SIXTH_LETTER_POSITION -> letter5.text = EMPTY_TEXT
+                }
+                currentLetterPosition--
+            } else {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = it
+                    SECOND_LETTER_POSITION -> letter2.text = it
+                    THIRD_LETTER_POSITION -> letter3.text = it
+                    FOURTH_LETTER_POSITION -> letter4.text = it
+                    FIFTH_LETTER_POSITION -> letter5.text = it
+                }
+                currentLetterPosition++
             }
-            currentLetterPosition--
-        } else {
-            when (currentLetterPosition) {
-                FIRST_LETTER_POSITION -> letter1.text = text
-                SECOND_LETTER_POSITION -> letter2.text = text
-                THIRD_LETTER_POSITION -> letter3.text = text
-                FOURTH_LETTER_POSITION -> letter4.text = text
-                FIFTH_LETTER_POSITION -> letter5.text = text
-            }
-            currentLetterPosition++
         }
+
     }
 
 
@@ -383,18 +402,18 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
     }
 
-    fun getTheWordFromLetters(): String {
+    private fun getTheWordFromLetters(): String {
         val word = letter1.text.toString() + letter2.text.toString() + letter3.text.toString() +
                 letter4.text.toString() + letter5.text.toString()
         return word
     }
 
-    fun clearInput() {
-        letter1.text = ""
-        letter2.text = ""
-        letter3.text = ""
-        letter4.text = ""
-        letter5.text = ""
+    private fun clearInput() {
+        letter1.text = EMPTY_TEXT
+        letter2.text = EMPTY_TEXT
+        letter3.text = EMPTY_TEXT
+        letter4.text = EMPTY_TEXT
+        letter5.text = EMPTY_TEXT
         currentLetterPosition = 1
     }
 

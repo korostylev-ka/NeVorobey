@@ -7,6 +7,10 @@
     <string name="ne_vorobey_welcome">Слово - НЕ ВОРОБЕЙ…</string>
     <string name="ne_vorobey_descr">Check your vocabulary - let\'s guess the word for 6 attempts</string>
     <string name="choose_level">Choose difficulty:</string>
+    <string name="have_current_game">You have current game. Do you want continue or start new?</string>
+    <string name="start_new_dialog">Start new</string>
+    <string name="continue_dialog">Continue game</string>
+    <string name="back_dialog">Back</string>
     <string name="easy_4">4 letters</string>
     <string name="medium_5">5 letters</string>
     <string name="hard_6">6 letters</string>
