@@ -11,18 +11,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.korostylev.nevorobey.R
+import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentFiveLettersBinding
+import com.korostylev.nevorobey.databinding.FragmentFourLettersBinding
 import com.korostylev.nevorobey.dto.Answer
+import com.korostylev.nevorobey.dto.Level
+import com.korostylev.nevorobey.entity.ActiveGameEntity
+import com.korostylev.nevorobey.entity.UsedWordsEntity
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
+import kotlin.math.E
 
 // TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+
 private const val BACKSPACE = "backspace"
 private const val ROW_ONE = 1
 private const val ROW_TWO = 2
@@ -36,16 +45,14 @@ private const val THIRD_LETTER_POSITION = 3
 private const val FOURTH_LETTER_POSITION = 4
 private const val FIFTH_LETTER_POSITION = 5
 private const val SIXTH_LETTER_POSITION = 6
+private const val IS_GAME_CONTINUE = "IS_GAME_CONTINUE"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FiveLettersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
+    private var _binding: FragmentFiveLettersBinding? = null
+    private val binding: FragmentFiveLettersBinding
+        get() = _binding ?: throw RuntimeException("FragmentFiveLettersBinding is null")
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var currentLetterPosition = 0
         set(value)  {
             if (value < 2) {
@@ -99,29 +106,92 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var letter3: TextView
     private lateinit var letter4: TextView
     private lateinit var letter5: TextView
-    private val presenter: NeVorobeyPresenter =  NeVorobeyPresenterImpl(this)
+    private lateinit var presenter: NeVorobeyPresenter
+    private var isGameContinue = false
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.MEDIUM, Level.MEDIUM)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            isGameContinue = it.getBoolean(IS_GAME_CONTINUE)
         }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFiveLettersBinding.inflate(layoutInflater)
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
-        if (currentFragment == null) {
-            val fragment = KeyboardFragment.newInstance()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.keyboard, fragment, null)
-                .commit()
+        _binding = FragmentFiveLettersBinding.inflate(inflater, container, false)
+        addKeyboardFragment()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViews()
+        keyboardTextObserve()
+        addTextWatchers()
+        setClickListeners()
+        loadGame()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
+
+
+
+    private fun loadGame() {
+        val currentGame = presenter.getCurrentGame()
+        if (currentGame != null) {
+            if (currentGame.currentGameLevel == ActiveGameEntity.MEDIUM && isGameContinue) {
+                presenter.wordsFromDBLiveData.observeOnce(viewLifecycleOwner) {
+                    for (word in it) {
+                        letter1.text = word.word[FIFTH_LETTER_INDEX].toString()
+                        letter2.text = word.word[SECOND_LETTER_INDEX].toString()
+                        letter3.text = word.word[THIRD_LETTER_INDEX].toString()
+                        letter4.text = word.word[FOURTH_LETTER_INDEX].toString()
+                        letter5.text = word.word[FIFTH_LETTER_INDEX].toString()
+                        presenter.checkWord(word.word)
+                    }
+                }
+            }  else {
+                presenter.deleteWordsFromDB()
+            }
+
         }
+    }
+
+    private fun retryGame() {
+        requireActivity().supportFragmentManager.popBackStack(StartFragment.NEW_GAME_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    private fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: (T) -> Unit) {
+        observe(owner) { value ->
+            observer(value)
+            removeObservers(owner)
+        }
+    }
+
+    private fun setClickListeners() {
+        binding.buttonOk.setOnClickListener {
+            val word = getTheWordFromLetters()
+            val usedWordEntity = UsedWordsEntity(UsedWordsEntity.ID, word)
+            presenter.checkWord(word)
+            presenter.saveWordToDB(usedWordEntity)
+        }
+        binding.buttonCancel.setOnClickListener {
+            presenter.clearInputFields()
+        }
+    }
+
+    private fun bindViews() {
         cell11 = binding.cell11
         cell12 = binding.cell12
         cell13 = binding.cell13
@@ -157,46 +227,40 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         letter3 = binding.input3
         letter4 = binding.input4
         letter5 = binding.input5
+        binding.buttonOk.isEnabled = false
+        binding.buttonCancel.isEnabled = false
+    }
 
-        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
+    private fun addKeyboardFragment() {
+        val fragment = KeyboardFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.keyboard, fragment, null)
+            .commit()
+//        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
+//        if (currentFragment == null) {
+//            val fragment = KeyboardFragment.newInstance()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.keyboard, fragment, null)
+//                .commit()
+//        }
+    }
 
-            if (it == BACKSPACE) {
-                when (currentLetterPosition) {
-                    FIRST_LETTER_POSITION -> letter1.text = ""
-                    SECOND_LETTER_POSITION -> letter1.text = ""
-                    THIRD_LETTER_POSITION -> letter2.text = ""
-                    FOURTH_LETTER_POSITION -> letter3.text = ""
-                    FIFTH_LETTER_POSITION -> letter4.text = ""
-                    SIXTH_LETTER_POSITION -> letter5.text = ""
-                }
-                currentLetterPosition--
-            } else {
-                when (currentLetterPosition) {
-                    FIRST_LETTER_POSITION -> letter1.text = it
-                    SECOND_LETTER_POSITION -> letter2.text = it
-                    THIRD_LETTER_POSITION -> letter3.text = it
-                    FOURTH_LETTER_POSITION -> letter4.text = it
-                    FIFTH_LETTER_POSITION -> letter5.text = it
-                }
-                currentLetterPosition++
-            }
+    fun switchButtons() {
+        if (letter1.text.isNotEmpty() && letter2.text.isNotEmpty() && letter3.text.isNotEmpty() &&
+            letter4.text.isNotEmpty() && letter5.text.isNotEmpty()) {
+            binding.buttonOk.isEnabled = true
+        } else {
+            binding.buttonOk.isEnabled = false
         }
-
-        fun switchButtons() {
-            if (letter1.text.isNotEmpty() && letter2.text.isNotEmpty() && letter3.text.isNotEmpty() &&
-                letter4.text.isNotEmpty() && letter5.text.isNotEmpty()) {
-                binding.buttonOk.isEnabled = true
-            } else {
-                binding.buttonOk.isEnabled = false
-            }
-            if (letter1.text.isNotEmpty() || letter2.text.isNotEmpty() || letter3.text.isNotEmpty() ||
-                letter4.text.isNotEmpty() || letter5.text.isNotEmpty()) {
-                binding.buttonCancel.isEnabled = true
-            } else {
-                binding.buttonCancel.isEnabled = false
-            }
+        if (letter1.text.isNotEmpty() || letter2.text.isNotEmpty() || letter3.text.isNotEmpty() ||
+            letter4.text.isNotEmpty() || letter5.text.isNotEmpty()) {
+            binding.buttonCancel.isEnabled = true
+        } else {
+            binding.buttonCancel.isEnabled = false
         }
+    }
 
+    private fun addTextWatchers() {
         val inputTextWatcherLetterOne = object : TextWatcher {
 
             var position = 0
@@ -342,47 +406,73 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 }
             }
         }
-
-
         binding.input1.addTextChangedListener(inputTextWatcherLetterOne)
         binding.input2.addTextChangedListener(inputTextWatcherLetterTwo)
         binding.input3.addTextChangedListener(inputTextWatcherLetterThree)
         binding.input4.addTextChangedListener(inputTextWatcherLetterFour)
         binding.input5.addTextChangedListener(inputTextWatcherLetterFive)
-        binding.buttonOk.isEnabled = false
-        binding.buttonCancel.isEnabled = false
-        binding.buttonOk.setOnClickListener {
-            val word = getTheWordFromLetters()
-            presenter.checkWord(word)
-        }
-        binding.buttonCancel.setOnClickListener {
-            presenter.clearInputFields()
-        }
-
-
-        return binding.root
     }
+
+    private fun keyboardTextObserve() {
+        keyBoardViewModel.keyboardText.observe(viewLifecycleOwner) {
+            if (it == BACKSPACE) {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    SECOND_LETTER_POSITION -> letter1.text = EMPTY_TEXT
+                    THIRD_LETTER_POSITION -> letter2.text = EMPTY_TEXT
+                    FOURTH_LETTER_POSITION -> letter3.text = EMPTY_TEXT
+                    FIFTH_LETTER_POSITION -> letter4.text = EMPTY_TEXT
+                    SIXTH_LETTER_POSITION -> letter5.text = EMPTY_TEXT
+                }
+                currentLetterPosition--
+            } else {
+                when (currentLetterPosition) {
+                    FIRST_LETTER_POSITION -> letter1.text = it
+                    SECOND_LETTER_POSITION -> letter2.text = it
+                    THIRD_LETTER_POSITION -> letter3.text = it
+                    FOURTH_LETTER_POSITION -> letter4.text = it
+                    FIFTH_LETTER_POSITION -> letter5.text = it
+                }
+                currentLetterPosition++
+            }
+        }
+
+    }
+
 
     companion object {
 
         @JvmStatic
-        fun newInstance() =
-            FiveLettersFragment()
+        fun newInstance(isGameContinue: Boolean): FiveLettersFragment {
+            return FiveLettersFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(IS_GAME_CONTINUE, isGameContinue)
+                }
+            }
+        }
+
+
+        private const val EMPTY_TEXT = ""
+        private const val FIRST_LETTER_INDEX = 0
+        private const val SECOND_LETTER_INDEX = 1
+        private const val THIRD_LETTER_INDEX = 2
+        private const val FOURTH_LETTER_INDEX = 3
+        private const val FIFTH_LETTER_INDEX = 4
 
     }
 
-    fun getTheWordFromLetters(): String {
+    private fun getTheWordFromLetters(): String {
         val word = letter1.text.toString() + letter2.text.toString() + letter3.text.toString() +
                 letter4.text.toString() + letter5.text.toString()
         return word
     }
 
-    fun clearInput() {
-        letter1.text = ""
-        letter2.text = ""
-        letter3.text = ""
-        letter4.text = ""
-        letter5.text = ""
+    private fun clearInput() {
+        letter1.text = EMPTY_TEXT
+        letter2.text = EMPTY_TEXT
+        letter3.text = EMPTY_TEXT
+        letter4.text = EMPTY_TEXT
+        letter5.text = EMPTY_TEXT
         currentLetterPosition = 1
     }
 

@@ -6,7 +6,7 @@ data class Answer(
     var lettersAmount: Int
 ) {
     private val letters: MutableList<Pair<Letters, Int>?> = MutableList(lettersAmount) {null}
-    private val keysBackgroundValues: MutableList<Pair<Letters, Int>> = mutableListOf()
+    private val keysBackgroundValues: MutableList<Pair<Letters, Int>?> = MutableList(33) {null}
     private var currentRow = 0
 
     fun increaseCurrentRow() = currentRow++
