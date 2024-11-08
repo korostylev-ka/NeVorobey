@@ -1,5 +1,6 @@
 package com.korostylev.nevorobey.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,12 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import com.korostylev.nevorobey.R
 import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentFourLettersBinding
 import com.korostylev.nevorobey.dto.Answer
+import com.korostylev.nevorobey.dto.Level
 import com.korostylev.nevorobey.entity.ActiveGameEntity
+import com.korostylev.nevorobey.entity.UsedWordsEntity
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
@@ -31,7 +38,7 @@ private const val SECOND_LETTER_POSITION = 2
 private const val THIRD_LETTER_POSITION = 3
 private const val FOURTH_LETTER_POSITION = 4
 private const val FIFTH_LETTER_POSITION = 5
-private const val SIXTH_LETTER_POSITION = 6
+private const val IS_GAME_CONTINUE = "IS_GAME_CONTINUE"
 
 
 class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
@@ -85,11 +92,15 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var letter3: TextView
     private lateinit var letter4: TextView
     private lateinit var presenter: NeVorobeyPresenter
+    private var isGameContinue = false
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.EASY)
+        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.EASY, Level.EASY)
+        arguments?.let {
+            isGameContinue = it.getBoolean(IS_GAME_CONTINUE)
+        }
     }
 
     override fun onCreateView(
@@ -108,12 +119,47 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         keyboardTextObserve()
         addTextWatchers()
         setClickListeners()
+        loadGame()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun loadGame() {
+        val currentGame = presenter.getCurrentGame()
+        if (currentGame != null) {
+            if (currentGame.currentGameLevel == ActiveGameEntity.EASY && isGameContinue) {
+                presenter.wordsFromDBLiveData.observeOnce(viewLifecycleOwner) {
+                    for (word in it) {
+                        letter1.text = word.word[FIRST_LETTER_INDEX].toString()
+                        letter2.text = word.word[SECOND_LETTER_INDEX].toString()
+                        letter3.text = word.word[THIRD_LETTER_INDEX].toString()
+                        letter4.text = word.word[FOURTH_LETTER_INDEX].toString()
+                        presenter.checkWord(word.word)
+                    }
+                }
+            } else {
+                presenter.deleteWordsFromDB()
+            }
+        }
+    }
+
+    private fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: (T) -> Unit) {
+        observe(owner) { value ->
+            observer(value)
+            removeObservers(owner)
+        }
     }
 
     private fun setClickListeners() {
         binding.buttonOk.setOnClickListener {
             val word = getTheWordFromLetters()
+            val usedWordEntity = UsedWordsEntity(UsedWordsEntity.ID, word)
             presenter.checkWord(word)
+            presenter.saveWordToDB(usedWordEntity)
         }
         binding.buttonCancel.setOnClickListener {
             presenter.clearInputFields()
@@ -154,13 +200,17 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     }
 
     private fun addKeyboardFragment() {
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
-        if (currentFragment == null) {
-            val fragment = KeyboardFragment.newInstance()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.keyboard, fragment, null)
-                .commit()
-        }
+        val fragment = KeyboardFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.keyboard, fragment, null)
+            .commit()
+//        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
+//        if (currentFragment == null) {
+//            val fragment = KeyboardFragment.newInstance()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.keyboard, fragment, null)
+//                .commit()
+//        }
     }
 
     fun switchButtons() {
@@ -342,14 +392,84 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         currentLetterPosition = 1
     }
 
+    @SuppressLint("ResourceAsColor")
+    fun changeViewBackground(textView: TextView, value: Int?) {
+        when (value) {
+            Answer.LETTER_POSITION_GUESSED -> {
+                textView.setBackgroundResource(R.drawable.cell_text_view_a)
+                textView.setTextColor(R.color.color_grey)
+            }
+            Answer.LETTER_IS_EXIST -> {
+                textView.setBackgroundResource(R.drawable.cell_text_view_b)
+                textView.setTextColor(R.color.color_grey)
+            }
+            else -> textView.setBackgroundResource(R.drawable.cell_text_view)
+        }
+    }
+
+    fun changeCurrentCells(currentRow: Int) {
+        when (currentRow) {
+            ROW_ONE -> {
+                currentCell1 = cell11
+                currentCell2 = cell12
+                currentCell3 = cell13
+                currentCell4 = cell14
+            }
+            ROW_TWO -> {
+                currentCell1 = cell21
+                currentCell2 = cell22
+                currentCell3 = cell23
+                currentCell4 = cell24
+            }
+            ROW_THREE -> {
+                currentCell1 = cell31
+                currentCell2 = cell32
+                currentCell3 = cell33
+                currentCell4 = cell34
+            }
+            ROW_FOUR -> {
+                currentCell1 = cell41
+                currentCell2 = cell42
+                currentCell3 = cell43
+                currentCell4 = cell44
+            }
+            ROW_FIVE -> {
+                currentCell1 = cell51
+                currentCell2 = cell52
+                currentCell3 = cell53
+                currentCell4 = cell54
+            }
+            ROW_SIX -> {
+                currentCell1 = cell61
+                currentCell2 = cell62
+                currentCell3 = cell63
+                currentCell4 = cell64
+            }
+
+            else -> {
+                currentCell1 = null
+                currentCell2 = null
+                currentCell3 = null
+                currentCell4 = null
+            }
+        }
+    }
+
     companion object {
         @JvmStatic
-        fun newInstance(): FourLettersFragment {
-            return FourLettersFragment()
+        fun newInstance(isGameContinue: Boolean): FourLettersFragment {
+            return FourLettersFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(IS_GAME_CONTINUE, isGameContinue)
+                }
+            }
         }
 
         private const val EMPTY_TEXT = ""
-
+        private const val FIRST_LETTER_INDEX = 0
+        private const val SECOND_LETTER_INDEX = 1
+        private const val THIRD_LETTER_INDEX = 2
+        private const val FOURTH_LETTER_INDEX = 3
     }
 
     override fun pressed(text: String) {
@@ -357,10 +477,42 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     }
 
     override fun checkWord(answer: Answer) {
-        TODO("Not yet implemented")
+        val letters = answer.getLetters()
+        for (item in letters) {
+            if (item != null) {
+                keyBoardViewModel.changeLetterBackground(item.first, item.second)
+            }
+        }
+        val letterOne = letter1.text.toString()
+        val letterTwo = letter2.text.toString()
+        val letterThree = letter3.text.toString()
+        val letterFour = letter4.text.toString()
+        if (letterOne.isEmpty() || letterTwo.isEmpty() || letterThree.isEmpty() || letterFour.isEmpty()) {
+            Toast.makeText(context, R.string.enter_all_letters, Toast.LENGTH_LONG)
+                .show()
+            return
+        }
+        changeCurrentCells(answer.getCurrentRow())
+        currentCell1?.let {
+            changeViewBackground(it, answer.getLetters()[0]?.second)
+            it.text = letterOne
+        }
+        currentCell2?.let {
+            changeViewBackground(it, answer.getLetters()[1]?.second)
+            it.text = letterTwo
+        }
+        currentCell3?.let {
+            changeViewBackground(it, answer.getLetters()[2]?.second)
+            it.text = letterThree
+        }
+        currentCell4?.let {
+            changeViewBackground(it, answer.getLetters()[3]?.second)
+            it.text = letterFour
+        }
+        clearInput()
     }
 
     override fun clearInputFields() {
-        TODO("Not yet implemented")
+        clearInput()
     }
 }

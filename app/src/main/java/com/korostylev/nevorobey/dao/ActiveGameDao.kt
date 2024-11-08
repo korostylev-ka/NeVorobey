@@ -16,5 +16,5 @@ interface ActiveGameDao {
     fun insert(activeGameEntity: ActiveGameEntity)
 
     @Query("DELETE FROM ActiveGameEntity")
-    fun delete()
+    fun finishGame()
 }

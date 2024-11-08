@@ -1,18 +1,35 @@
 package com.korostylev.nevorobey.model
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.korostylev.nevorobey.dao.ActiveGameDao
+import com.korostylev.nevorobey.dao.UsedWordsDao
 import com.korostylev.nevorobey.dto.Answer
 import com.korostylev.nevorobey.dto.Answer.Companion.LETTER_IS_EXIST
 import com.korostylev.nevorobey.dto.Answer.Companion.LETTER_IS_NOT_EXIST
+import com.korostylev.nevorobey.dto.Answer.Companion.LETTER_POSITION_GUESSED
 import com.korostylev.nevorobey.dto.Letters
+import com.korostylev.nevorobey.dto.Level
 import com.korostylev.nevorobey.entity.ActiveGameEntity
+import com.korostylev.nevorobey.entity.UsedWordsEntity
 
-class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao): NeVorobeyModel {
-    private var wordSize = 5
+class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: UsedWordsDao, level: Level): NeVorobeyModel {
+
+
+    private var wordSize = when (level) {
+        Level.EASY -> EASY_WORD_LENGHT
+        Level.MEDIUM -> MEDIUM_WORD_LENGHT
+        Level.HARD -> HARD_WORD_LENGHT
+    }
     private var answer = Answer(wordSize)
     private var currentRow: Int = 1
-    private var theWord = "ШПАЛА"
+    private var theWord = when (wordSize) {
+        4 -> "РУКА"
+        5 -> "ШПАЛА"
+        6 -> "БОЛОТО"
+        else -> ""
+    }
 
     override fun getWord() = theWord
 
@@ -42,10 +59,12 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao): NeVorobeyModel {
             val theLetter = Letters.entries.filter {
                 it.letter == letter
             }[0]
-//            val currentBackground = lettersBackground[index]
+            val currentBackground = lettersBackground[index]?.second
+            Log.d("vorobey", "color background is $currentBackground")
 
             if (letter == theWordLowCase[index]) {
                 answer.updateLetters(index, Pair(theLetter, Answer.LETTER_POSITION_GUESSED))
+                answer.addBackground(theLetter, LETTER_POSITION_GUESSED)
             }
             if (theWordLowCase.contains(letter) && letter != theWordLowCase[index]) {
                 val count = theWordLowCase.count {
@@ -55,21 +74,31 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao): NeVorobeyModel {
                 if (guessed != null) {
                     if (guessed < count) {
                         answer.updateLetters(index, Pair(theLetter, LETTER_IS_EXIST))
+                        if (currentBackground == LETTER_IS_NOT_EXIST) {
+                            Log.d("vorobey", "letter back $letter to $currentBackground")
+                            answer.addBackground(theLetter, LETTER_IS_NOT_EXIST)
+                            Log.d("vorobey", "letter back $letter to ${answer.getKeysBackground()}")
+                        } else {
+                            Log.d("vorobey", "letter back $letter to $currentBackground")
+                            answer.addBackground(theLetter, LETTER_IS_EXIST)
+                            Log.d("vorobey", "letter back $letter to ${answer.getKeysBackground()}")
+                        }
 //                        when (currentBackground) {
 //                            null -> answer.addBackground(theLetter, LETTER_IS_EXIST)
 //
 //                        }
                     } else {
                         answer.updateLetters(index, Pair(theLetter, LETTER_IS_NOT_EXIST))
-//                        answer.addBackground(theLetter, LETTER_IS_NOT_EXIST)
+                        answer.addBackground(theLetter, LETTER_IS_NOT_EXIST)
                     }
                 } else {
                     answer.updateLetters(index, Pair(theLetter, LETTER_IS_EXIST))
+                    answer.addBackground(theLetter, LETTER_IS_EXIST)
                 }
             }
             if (!theWordLowCase.contains(letter)) {
                 answer.updateLetters(index, Pair(theLetter, LETTER_IS_NOT_EXIST))
-                answer.addBackground(theLetter, Answer.LETTER_IS_NOT_EXIST)
+                answer.addBackground(theLetter, LETTER_IS_NOT_EXIST)
             }
 
         }
@@ -81,8 +110,31 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao): NeVorobeyModel {
         activeGameDao.insert(activeGameEntity)
     }
 
+    override fun getCurrentGame(): ActiveGameEntity? {
+        return activeGameDao.getCurrentGame()
+    }
+
     override fun deleteCurrentGame() {
         TODO("Not yet implemented")
+    }
+
+    override fun getWordsFromDB(): LiveData<List<UsedWordsEntity>> {
+        return usedWordsDao.getAllWord()
+//        _wordsFromDB.value = usedWordsDao.getAllWord().value
+    }
+
+    override fun saveWordToDB(usedWordsEntity: UsedWordsEntity) {
+        usedWordsDao.saveWordToDB(usedWordsEntity)
+    }
+
+    override fun deleteWordsFromDB() {
+        usedWordsDao.deleteWords()
+    }
+
+    companion object {
+        const val EASY_WORD_LENGHT = 4
+        const val MEDIUM_WORD_LENGHT = 5
+        const val HARD_WORD_LENGHT = 6
     }
 
 }

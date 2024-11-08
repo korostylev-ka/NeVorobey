@@ -11,22 +11,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.korostylev.nevorobey.R
 import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentFiveLettersBinding
 import com.korostylev.nevorobey.databinding.FragmentFourLettersBinding
 import com.korostylev.nevorobey.dto.Answer
+import com.korostylev.nevorobey.dto.Level
 import com.korostylev.nevorobey.entity.ActiveGameEntity
+import com.korostylev.nevorobey.entity.UsedWordsEntity
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
 import kotlin.math.E
 
 // TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+
 private const val BACKSPACE = "backspace"
 private const val ROW_ONE = 1
 private const val ROW_TWO = 2
@@ -40,19 +45,14 @@ private const val THIRD_LETTER_POSITION = 3
 private const val FOURTH_LETTER_POSITION = 4
 private const val FIFTH_LETTER_POSITION = 5
 private const val SIXTH_LETTER_POSITION = 6
+private const val IS_GAME_CONTINUE = "IS_GAME_CONTINUE"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FiveLettersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private var _binding: FragmentFiveLettersBinding? = null
     private val binding: FragmentFiveLettersBinding
         get() = _binding ?: throw RuntimeException("FragmentFiveLettersBinding is null")
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var currentLetterPosition = 0
         set(value)  {
             if (value < 2) {
@@ -107,15 +107,16 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     private lateinit var letter4: TextView
     private lateinit var letter5: TextView
     private lateinit var presenter: NeVorobeyPresenter
+    private var isGameContinue = false
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.MEDIUM, Level.MEDIUM)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            isGameContinue = it.getBoolean(IS_GAME_CONTINUE)
         }
-        presenter = NeVorobeyPresenterImpl(this, requireContext(), ActiveGameEntity.MEDIUM)
+
     }
 
     override fun onCreateView(
@@ -124,8 +125,6 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     ): View {
         _binding = FragmentFiveLettersBinding.inflate(inflater, container, false)
         addKeyboardFragment()
-
-
         return binding.root
     }
 
@@ -135,12 +134,57 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         keyboardTextObserve()
         addTextWatchers()
         setClickListeners()
+        loadGame()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
+
+
+
+    private fun loadGame() {
+        val currentGame = presenter.getCurrentGame()
+        if (currentGame != null) {
+            if (currentGame.currentGameLevel == ActiveGameEntity.MEDIUM && isGameContinue) {
+                presenter.wordsFromDBLiveData.observeOnce(viewLifecycleOwner) {
+                    for (word in it) {
+                        letter1.text = word.word[FIFTH_LETTER_INDEX].toString()
+                        letter2.text = word.word[SECOND_LETTER_INDEX].toString()
+                        letter3.text = word.word[THIRD_LETTER_INDEX].toString()
+                        letter4.text = word.word[FOURTH_LETTER_INDEX].toString()
+                        letter5.text = word.word[FIFTH_LETTER_INDEX].toString()
+                        presenter.checkWord(word.word)
+                    }
+                }
+            }  else {
+                presenter.deleteWordsFromDB()
+            }
+
+        }
+    }
+
+    private fun retryGame() {
+        requireActivity().supportFragmentManager.popBackStack(StartFragment.NEW_GAME_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    private fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: (T) -> Unit) {
+        observe(owner) { value ->
+            observer(value)
+            removeObservers(owner)
+        }
     }
 
     private fun setClickListeners() {
         binding.buttonOk.setOnClickListener {
             val word = getTheWordFromLetters()
+            val usedWordEntity = UsedWordsEntity(UsedWordsEntity.ID, word)
             presenter.checkWord(word)
+            presenter.saveWordToDB(usedWordEntity)
         }
         binding.buttonCancel.setOnClickListener {
             presenter.clearInputFields()
@@ -188,13 +232,17 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     }
 
     private fun addKeyboardFragment() {
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
-        if (currentFragment == null) {
-            val fragment = KeyboardFragment.newInstance()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.keyboard, fragment, null)
-                .commit()
-        }
+        val fragment = KeyboardFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.keyboard, fragment, null)
+            .commit()
+//        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.keyboard)
+//        if (currentFragment == null) {
+//            val fragment = KeyboardFragment.newInstance()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.keyboard, fragment, null)
+//                .commit()
+//        }
     }
 
     fun switchButtons() {
@@ -395,10 +443,21 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     companion object {
 
         @JvmStatic
-        fun newInstance() =
-            FiveLettersFragment()
+        fun newInstance(isGameContinue: Boolean): FiveLettersFragment {
+            return FiveLettersFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(IS_GAME_CONTINUE, isGameContinue)
+                }
+            }
+        }
+
 
         private const val EMPTY_TEXT = ""
+        private const val FIRST_LETTER_INDEX = 0
+        private const val SECOND_LETTER_INDEX = 1
+        private const val THIRD_LETTER_INDEX = 2
+        private const val FOURTH_LETTER_INDEX = 3
+        private const val FIFTH_LETTER_INDEX = 4
 
     }
 

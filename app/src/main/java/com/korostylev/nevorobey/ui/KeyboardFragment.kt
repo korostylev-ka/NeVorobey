@@ -67,6 +67,7 @@ class KeyboardFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("vorobey", "keyboard oncreate")
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -117,6 +118,7 @@ class KeyboardFragment : Fragment() {
             val background = when (it.second) {
                 Answer.LETTER_IS_EXIST -> R.drawable.keyboard_cell_exist
                 Answer.LETTER_IS_NOT_EXIST -> R.drawable.keyboard_cell_not_exist
+                Answer.LETTER_POSITION_GUESSED -> R.drawable.keyboard_cell_guessed
                 else -> R.drawable.keyboard_cell_default
             }
             when (letterIndex) {
@@ -263,6 +265,11 @@ class KeyboardFragment : Fragment() {
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("vorobey", "keyboard ondestroy")
     }
 
     companion object {

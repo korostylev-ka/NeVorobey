@@ -9,6 +9,7 @@ import com.korostylev.nevorobey.entity.ActiveGameEntity
 
 private const val CURRENT_GAME_LEVEL = "level"
 private const val SELECTED_GAME_LEVEL = "selectedLevel"
+private const val IS_GAME_CONTINUE = "IS_GAME_CONTINUE"
 
 class ContinueDialogFragment: DialogFragment() {
 
@@ -27,10 +28,10 @@ class ContinueDialogFragment: DialogFragment() {
         return AlertDialog.Builder(context)
             .setMessage(R.string.have_current_game)
             .setPositiveButton(R.string.start_new_dialog) {_,_->
-                moveToGameFragment(selectedGameLevel)
+                moveToGameFragment(selectedGameLevel, NEW_GAME)
             }
             .setNegativeButton(R.string.continue_dialog) {_,_->
-                requireActivity().supportFragmentManager.popBackStack()
+                moveToGameFragment(selectedGameLevel, CONTINUE_GAME)
             }
             .setNeutralButton(R.string.back_dialog) {_,_->
                 requireActivity().supportFragmentManager.popBackStack()
@@ -38,16 +39,17 @@ class ContinueDialogFragment: DialogFragment() {
             .create()
     }
 
-    fun moveToGameFragment(selectedLevel: Int) {
+    fun moveToGameFragment(selectedLevel: Int, isGameContinue: Boolean) {
         val fragment = when (selectedLevel) {
-            ActiveGameEntity.EASY -> FourLettersFragment.newInstance()
-            ActiveGameEntity.MEDIUM -> FiveLettersFragment.newInstance()
-            ActiveGameEntity.HARD -> SixLettersFragment.newInstance()
+            ActiveGameEntity.EASY -> FourLettersFragment.newInstance(isGameContinue)
+            ActiveGameEntity.MEDIUM -> FiveLettersFragment.newInstance(isGameContinue)
+            ActiveGameEntity.HARD -> SixLettersFragment.newInstance(isGameContinue)
             else -> throw RuntimeException("No level!")
         }
         requireActivity().supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
+            .addToBackStack(StartFragment.NEW_GAME_TAG)
             .commit()
     }
 
@@ -58,5 +60,8 @@ class ContinueDialogFragment: DialogFragment() {
                 putInt(SELECTED_GAME_LEVEL, selectedGameLevel)
             }
         }
+
+        private const val NEW_GAME = false
+        private const val CONTINUE_GAME = true
     }
 }

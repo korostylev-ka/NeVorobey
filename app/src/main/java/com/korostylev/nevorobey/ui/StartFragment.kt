@@ -14,24 +14,16 @@ import com.korostylev.nevorobey.dto.Level
 import com.korostylev.nevorobey.entity.ActiveGameEntity
 
 // TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [StartFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class StartFragment : Fragment() {
+    private var _binding: FragmentStartBinding? = null
+    private val binding: FragmentStartBinding
+        get() = _binding ?: throw RuntimeException("FragmentStartBinding is null")
     private lateinit var activeGameDao: ActiveGameDao
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var selectedLevel: Level? = null
     private lateinit var startButton: ImageView
 
-    fun moveToFragment(selectedLevel: Level) {
+    private fun moveToFragment(selectedLevel: Level) {
         val currentGame = activeGameDao.getCurrentGame()
         val selectedGameLevel = when (selectedLevel) {
             Level.EASY -> ActiveGameEntity.EASY
@@ -41,23 +33,25 @@ class StartFragment : Fragment() {
         if (currentGame == null) {
             when (selectedLevel) {
                 Level.EASY -> {
-                    val fragment = FourLettersFragment.newInstance()
+                    val fragment = FourLettersFragment.newInstance(NEW_GAME)
                     requireActivity().supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, fragment, null)
+                        .addToBackStack(NEW_GAME_TAG)
                         .commit()
 
                 }
                 Level.MEDIUM -> {
-                    val fragment = FiveLettersFragment.newInstance()
+                    val fragment = FiveLettersFragment.newInstance(NEW_GAME)
                     requireActivity().supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, fragment, null)
-                        .addToBackStack(null)
+                        .addToBackStack(NEW_GAME_TAG)
                         .commit()
                 }
                 Level.HARD -> {
-                val fragment = SixLettersFragment.newInstance()
+                val fragment = SixLettersFragment.newInstance(NEW_GAME)
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment, null)
+                    .addToBackStack(NEW_GAME_TAG)
                     .commit()
 
                 }
@@ -67,27 +61,12 @@ class StartFragment : Fragment() {
         }
     }
 
-    private fun showContinueDialog(currentGameLevel: Int, selectedGameLevel: Int) {
-        val fragment = ContinueDialogFragment.newInstance(currentGameLevel, selectedGameLevel)
-        fragment.show(requireActivity().supportFragmentManager, null)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-        activeGameDao = NeVorobeyDB.getInstance(requireActivity()).activeGameDao
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val binding = FragmentStartBinding.inflate(layoutInflater)
+    private fun bindViews() {
         startButton = binding.start
         startButton.isEnabled = false
+    }
+
+    private fun setClickListeners() {
         binding.easyContainer.setOnClickListener {
             it.setBackgroundResource(R.drawable.easy_stroke)
             binding.mediumContainer.setBackgroundResource(R.drawable.empty_stroke)
@@ -112,9 +91,35 @@ class StartFragment : Fragment() {
         binding.start.setOnClickListener {
             moveToFragment(selectedLevel!!)
         }
+    }
 
-        // Inflate the layout for this fragment
+    private fun showContinueDialog(currentGameLevel: Int, selectedGameLevel: Int) {
+        val fragment = ContinueDialogFragment.newInstance(currentGameLevel, selectedGameLevel)
+        fragment.show(requireActivity().supportFragmentManager, null)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activeGameDao = NeVorobeyDB.getInstance(requireActivity()).activeGameDao
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentStartBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViews()
+        setClickListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
@@ -123,5 +128,10 @@ class StartFragment : Fragment() {
             StartFragment().apply {
 
             }
+
+        private const val NEW_GAME = false
+        private const val CONTINUE_GAME = true
+        const val NEW_GAME_TAG = "NEW_GAME"
+
     }
 }
