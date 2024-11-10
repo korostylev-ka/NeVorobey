@@ -63,57 +63,40 @@ class KeyboardFragment : Fragment() {
     private lateinit var letter32: TextView
     private lateinit var letter33: TextView
     private lateinit var backspaceButton: TextView
+    private var _binding: FragmentKeyboardBinding? = null
+    private val binding: FragmentKeyboardBinding
+        get() = _binding ?: throw RuntimeException("FragmentKeyboardBinding is null")
     private val keyBoardViewModel: KeyBoardViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("vorobey", "keyboard oncreate")
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        keyBoardViewModel.clearLD()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentKeyboardBinding.inflate(layoutInflater)
-        letter1 = binding.letter1
-        letter2 = binding.letter2
-        letter3 = binding.letter3
-        letter4 = binding.letter4
-        letter5 = binding.letter5
-        letter6 = binding.letter6
-        letter7 = binding.letter7
-        letter8 = binding.letter8
-        letter9 = binding.letter9
-        letter10 = binding.letter10
-        letter11 = binding.letter11
-        letter12 = binding.letter12
-        letter13 = binding.letter13
-        letter14 = binding.letter14
-        letter15 = binding.letter15
-        letter16 = binding.letter16
-        letter17 = binding.letter17
-        letter18 = binding.letter18
-        letter19 = binding.letter19
-        letter20 = binding.letter20
-        letter21 = binding.letter21
-        letter22 = binding.letter22
-        letter23 = binding.letter23
-        letter24 = binding.letter24
-        letter25 = binding.letter25
-        letter26 = binding.letter26
-        letter27 = binding.letter27
-        letter28 = binding.letter28
-        letter29 = binding.letter29
-        letter30 = binding.letter30
-        letter31 = binding.letter31
-        letter32 = binding.letter32
-        letter33 = binding.letter33
-        backspaceButton = binding.backspace
+        _binding = FragmentKeyboardBinding.inflate(layoutInflater, container, false)
+        // Inflate the layout for this fragment
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViews()
+        setObservers()
+        setClickListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setObservers() {
         keyBoardViewModel.keyBackground.observe(viewLifecycleOwner) {
+            Log.d("vorobey", "background LD is ${it.toString()}")
             val letterIndex = it.first.index
             val background = when (it.second) {
                 Answer.LETTER_IS_EXIST -> R.drawable.keyboard_cell_exist
@@ -155,10 +138,48 @@ class KeyboardFragment : Fragment() {
                 LETTER31 -> letter31.setBackgroundResource(background)
                 LETTER32 -> letter32.setBackgroundResource(background)
                 LETTER33 -> letter33.setBackgroundResource(background)
-
-
             }
         }
+
+    }
+    private fun bindViews() {
+        letter1 = binding.letter1
+        letter2 = binding.letter2
+        letter3 = binding.letter3
+        letter4 = binding.letter4
+        letter5 = binding.letter5
+        letter6 = binding.letter6
+        letter7 = binding.letter7
+        letter8 = binding.letter8
+        letter9 = binding.letter9
+        letter10 = binding.letter10
+        letter11 = binding.letter11
+        letter12 = binding.letter12
+        letter13 = binding.letter13
+        letter14 = binding.letter14
+        letter15 = binding.letter15
+        letter16 = binding.letter16
+        letter17 = binding.letter17
+        letter18 = binding.letter18
+        letter19 = binding.letter19
+        letter20 = binding.letter20
+        letter21 = binding.letter21
+        letter22 = binding.letter22
+        letter23 = binding.letter23
+        letter24 = binding.letter24
+        letter25 = binding.letter25
+        letter26 = binding.letter26
+        letter27 = binding.letter27
+        letter28 = binding.letter28
+        letter29 = binding.letter29
+        letter30 = binding.letter30
+        letter31 = binding.letter31
+        letter32 = binding.letter32
+        letter33 = binding.letter33
+        backspaceButton = binding.backspace
+    }
+
+    private fun setClickListeners() {
         letter1.setOnClickListener {
             keyBoardViewModel.getTheLetterFromKeyboard(letter1.text.toString())
 
@@ -262,14 +283,6 @@ class KeyboardFragment : Fragment() {
         backspaceButton.setOnClickListener {
             keyBoardViewModel.getTheLetterFromKeyboard(BACKSPACE)
         }
-
-        // Inflate the layout for this fragment
-        return binding.root
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("vorobey", "keyboard ondestroy")
     }
 
     companion object {

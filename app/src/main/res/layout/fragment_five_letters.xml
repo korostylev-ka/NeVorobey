@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
 
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content">
         <TableRow
             android:id="@+id/row_1"
@@ -22,8 +22,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_1_1"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -31,8 +31,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_1_2"
-                android:layout_height="@dimen/cell_size"
-                android:width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -40,8 +40,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_1_3"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -49,8 +49,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_1_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -58,8 +58,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_1_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -73,8 +73,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_2_1"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -82,8 +82,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_2_2"
-                android:layout_height="@dimen/cell_size"
-                android:width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -91,8 +91,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_2_3"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -100,8 +100,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_2_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -109,8 +109,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_2_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -124,8 +124,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_3_1"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -133,8 +133,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_3_2"
-                android:layout_height="@dimen/cell_size"
-                android:width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -142,8 +142,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_3_3"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -151,8 +151,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_3_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -160,8 +160,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_3_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -175,8 +175,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_4_1"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -184,8 +184,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_4_2"
-                android:layout_height="@dimen/cell_size"
-                android:width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -193,8 +193,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_4_3"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -202,8 +202,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_4_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -211,8 +211,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_4_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -226,8 +226,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_5_1"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -235,8 +235,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_5_2"
-                android:layout_height="@dimen/cell_size"
-                android:width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -244,8 +244,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_5_3"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -253,8 +253,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_5_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -262,8 +262,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_5_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -277,8 +277,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_6_1"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -286,8 +286,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_6_2"
-                android:layout_height="@dimen/cell_size"
-                android:width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -295,8 +295,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_6_3"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -304,8 +304,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_6_4"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -313,8 +313,8 @@
             <TextView
                 android:layout_margin="@dimen/cell_margin"
                 android:id="@+id/cell_6_5"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_regular"
                 android:background="@drawable/cell_text_view">
@@ -350,8 +350,8 @@
                 android:id="@+id/input_1"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
@@ -360,8 +360,8 @@
                 android:id="@+id/input_2"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
@@ -370,8 +370,8 @@
                 android:id="@+id/input_3"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
@@ -380,8 +380,8 @@
                 android:id="@+id/input_4"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
@@ -390,8 +390,8 @@
                 android:id="@+id/input_5"
                 android:maxLength="1"
                 android:layout_margin="@dimen/cell_margin"
-                android:layout_height="@dimen/cell_size"
-                android:layout_width="@dimen/cell_size"
+                android:layout_height="@dimen/cell_size_five_letters"
+                android:layout_width="@dimen/cell_size_five_letters"
                 android:gravity="center"
                 style="@style/cell_text_input"
                 android:background="@drawable/cell_input_edit_text">
@@ -411,7 +411,7 @@
     </EditText>
     <FrameLayout
         android:id="@+id/keyboard"
-        android:layout_marginTop="@dimen/common"
+
         android:layout_marginStart="@dimen/padding"
         android:layout_marginEnd="@dimen/padding"
         android:layout_width="match_parent"
