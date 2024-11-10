@@ -13,8 +13,8 @@ private const val IS_GAME_CONTINUE = "IS_GAME_CONTINUE"
 
 class ContinueDialogFragment: DialogFragment() {
 
-    private var currentGameLevel = 0
-    private var selectedGameLevel = 0
+    private var currentGameLevel = EMPTY_LEVEL
+    private var selectedGameLevel = EMPTY_LEVEL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class ContinueDialogFragment: DialogFragment() {
                 moveToGameFragment(selectedGameLevel, NEW_GAME)
             }
             .setNegativeButton(R.string.continue_dialog) {_,_->
-                moveToGameFragment(selectedGameLevel, CONTINUE_GAME)
+                moveToGameFragment(currentGameLevel, CONTINUE_GAME)
             }
             .setNeutralButton(R.string.back_dialog) {_,_->
                 requireActivity().supportFragmentManager.popBackStack()
@@ -60,7 +60,7 @@ class ContinueDialogFragment: DialogFragment() {
                 putInt(SELECTED_GAME_LEVEL, selectedGameLevel)
             }
         }
-
+        private const val EMPTY_LEVEL = 0
         private const val NEW_GAME = false
         private const val CONTINUE_GAME = true
     }

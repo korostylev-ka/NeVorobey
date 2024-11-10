@@ -10,8 +10,8 @@ class KeyBoardViewModel: ViewModel() {
 
     private var emptyText = ""
 
-    private val _keyboardText: MutableLiveData<String> = MutableLiveData(emptyText)
-    private val _keyBackground: MutableLiveData<Pair<Letters, Int>> = MutableLiveData()
+    private var _keyboardText: MutableLiveData<String> = MutableLiveData(emptyText)
+    private var _keyBackground: MutableLiveData<Pair<Letters, Int>> = MutableLiveData()
     val keyboardText: LiveData<String>
         get() = _keyboardText
     val keyBackground: LiveData<Pair<Letters, Int>>
@@ -25,6 +25,10 @@ class KeyBoardViewModel: ViewModel() {
 
     fun changeLetterBackground(letter: Letters, value: Int) {
         _keyBackground.value = Pair(letter, value)
+    }
+
+    fun clearLD() {
+        _keyBackground = MutableLiveData()
     }
 
 }

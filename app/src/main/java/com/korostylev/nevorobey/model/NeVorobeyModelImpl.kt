@@ -26,7 +26,7 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
     private var currentRow: Int = 1
     private var theWord = when (wordSize) {
         4 -> "РУКА"
-        5 -> "ШПАЛА"
+        5 -> "СКАЛА"
         6 -> "БОЛОТО"
         else -> ""
     }
