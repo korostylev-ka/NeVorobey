@@ -56,9 +56,17 @@ class NeVorobeyPresenterImpl(private var viewInterface: ViewInterface, val conte
         model.deleteWordsFromDB()
     }
 
-    init {
-        model.saveCurrentGame(ActiveGameEntity(0, true, currentLevel))
+    override fun saveCurrentGame(activeGameEntity: ActiveGameEntity) {
+        model.saveCurrentGame(activeGameEntity)
     }
+
+    override suspend fun getRandomWord(wordSize: Int): String {
+        return model.getRandomWord(wordSize)
+    }
+
+//    init {
+//        model.saveCurrentGame(ActiveGameEntity(0, true, currentLevel))
+//    }
 
 
 }

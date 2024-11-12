@@ -3,6 +3,7 @@ package com.korostylev.nevorobey.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.korostylev.nevorobey.api.NeVorobeyApi
 import com.korostylev.nevorobey.dao.ActiveGameDao
 import com.korostylev.nevorobey.dao.UsedWordsDao
 import com.korostylev.nevorobey.dto.Answer
@@ -13,6 +14,10 @@ import com.korostylev.nevorobey.dto.Letters
 import com.korostylev.nevorobey.dto.Level
 import com.korostylev.nevorobey.entity.ActiveGameEntity
 import com.korostylev.nevorobey.entity.UsedWordsEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 
 class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: UsedWordsDao, level: Level): NeVorobeyModel {
 
@@ -24,12 +29,15 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
     }
     private var answer = Answer(wordSize)
     private var currentRow: Int = 1
-    private var theWord = when (wordSize) {
-        4 -> "РУКА"
-        5 -> "СКАЛА"
-        6 -> "БОЛОТО"
-        else -> ""
-    }
+//    private var theWord = when (wordSize) {
+//        4 -> "РУКА"
+//        5 -> "СКАЛА"
+//        6 -> "БОЛОТО"
+//        else -> ""
+//    }
+    private var theWord = activeGameDao.getCurrentGame()?.theWord ?: throw RuntimeException("There is no word in DB")
+
+
 
     override fun getWord() = theWord
 
@@ -131,10 +139,19 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
         usedWordsDao.deleteWords()
     }
 
+    override suspend fun getRandomWord(wordSize: Int): String {
+        val response = NeVorobeyApi.service.getRandomWord(wordSize)
+        theWord = response.body().toString()
+        Log.d("vorobey", "response is ${response.body()}")
+        return theWord
+    }
+
     companion object {
         const val EASY_WORD_LENGHT = 4
         const val MEDIUM_WORD_LENGHT = 5
         const val HARD_WORD_LENGHT = 6
     }
+
+
 
 }

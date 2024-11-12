@@ -15,4 +15,6 @@ interface NeVorobeyPresenter {
     fun getWordsFromDB(): LiveData<List<UsedWordsEntity>>
     fun saveWordToDB(usedWordsEntity: UsedWordsEntity)
     fun deleteWordsFromDB()
+    fun saveCurrentGame(activeGameEntity: ActiveGameEntity)
+    suspend fun getRandomWord(wordSize: Int): String
 }
