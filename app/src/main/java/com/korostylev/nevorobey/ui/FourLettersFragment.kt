@@ -503,6 +503,7 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     }
 
     override fun checkWord(answer: Answer) {
+
         val letters = answer.getLetters()
         for (item in letters) {
             if (item != null) {
@@ -536,7 +537,27 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             it.text = letterFour
         }
         clearInput()
+        val isGameFinished = answer.isGameFinished()
+        val isWinner = answer.isWinner()
+        if (isGameFinished) {
+            Thread.sleep(1000)
+            goToFinishFragment()
+        }
+        if (isWinner) {
+            Thread.sleep(1000)
+            goToFinishFragment()
+        }
     }
+
+    private fun goToFinishFragment() {
+        val finishFragment = FinishFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, finishFragment, null)
+            .commit()
+    }
+
+
+
 
     override fun clearInputFields() {
         clearInput()

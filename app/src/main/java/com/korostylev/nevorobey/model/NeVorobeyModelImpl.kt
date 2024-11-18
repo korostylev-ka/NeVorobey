@@ -48,6 +48,9 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
     }
 
     override fun checkWord(word: String): Answer {
+        if (word.lowercase() == theWord.lowercase()) {
+            answer.win()
+        }
         var guessedLetters = mutableMapOf<Char, Int>()
         val lettersBackground = answer.getKeysBackground()
         val wordLowCase = word.lowercase().toList()

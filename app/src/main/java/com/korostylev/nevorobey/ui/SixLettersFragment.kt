@@ -658,6 +658,23 @@ class SixLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             it.text = letterFive
         }
         clearInput()
+        val isGameFinished = answer.isGameFinished()
+        val isWinner = answer.isWinner()
+        if (isGameFinished) {
+            Thread.sleep(5000)
+            goToFinishFragment()
+        }
+        if (isWinner) {
+            Thread.sleep(5000)
+            goToFinishFragment()
+        }
+    }
+
+    private fun goToFinishFragment() {
+        val finishFragment = FinishFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, finishFragment, null)
+            .commit()
     }
 
     override fun clearInputFields() {
