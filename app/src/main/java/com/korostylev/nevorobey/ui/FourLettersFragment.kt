@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import com.korostylev.nevorobey.R
 import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentFourLettersBinding
@@ -21,9 +23,14 @@ import com.korostylev.nevorobey.dto.Answer
 import com.korostylev.nevorobey.dto.Level
 import com.korostylev.nevorobey.entity.ActiveGameEntity
 import com.korostylev.nevorobey.entity.UsedWordsEntity
+import com.korostylev.nevorobey.model.NeVorobeyModelImpl
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.E
 
 private const val BACKSPACE = "backspace"
@@ -120,6 +127,9 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         addTextWatchers()
         setClickListeners()
         loadGame()
+        viewLifecycleOwner.lifecycleScope.launch {
+            presenter.getRandomWord(4)
+        }
 
     }
 
@@ -143,7 +153,23 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 }
             } else {
                 presenter.deleteWordsFromDB()
+                getWordFromApi()
             }
+        } else {
+            presenter.deleteWordsFromDB()
+            getWordFromApi()
+
+
+        }
+    }
+
+    private fun getWordFromApi() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val word = viewLifecycleOwner.lifecycleScope.async {
+                presenter.getRandomWord(NeVorobeyModelImpl.EASY_WORD_LENGHT)
+            }.await()
+            val currentGame = ActiveGameEntity(0, true, ActiveGameEntity.EASY, word)
+            presenter.saveCurrentGame(currentGame)
         }
     }
 
@@ -477,6 +503,7 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
     }
 
     override fun checkWord(answer: Answer) {
+
         val letters = answer.getLetters()
         for (item in letters) {
             if (item != null) {
@@ -510,7 +537,27 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             it.text = letterFour
         }
         clearInput()
+        val isGameFinished = answer.isGameFinished()
+        val isWinner = answer.isWinner()
+        if (isGameFinished) {
+            Thread.sleep(1000)
+            goToFinishFragment()
+        }
+        if (isWinner) {
+            Thread.sleep(1000)
+            goToFinishFragment()
+        }
     }
+
+    private fun goToFinishFragment() {
+        val finishFragment = FinishFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, finishFragment, null)
+            .commit()
+    }
+
+
+
 
     override fun clearInputFields() {
         clearInput()

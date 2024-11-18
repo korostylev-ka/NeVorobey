@@ -8,6 +8,8 @@ data class Answer(
     private val letters: MutableList<Pair<Letters, Int>?> = MutableList(lettersAmount) {null}
     private val keysBackgroundValues: MutableList<Pair<Letters, Int>?> = MutableList(33) {null}
     private var currentRow = 0
+    private var max_rows = 6
+    private var isWinner = false
 
     fun increaseCurrentRow() = currentRow++
     fun getCurrentRow() = currentRow
@@ -20,6 +22,15 @@ data class Answer(
 
     fun addBackground(letters: Letters, backgroundValue: Int) {
         keysBackgroundValues.add(Pair(letters, backgroundValue))
+    }
+
+    fun isGameFinished(): Boolean {
+        return currentRow == max_rows
+    }
+
+    fun isWinner() = isWinner
+    fun win() {
+        isWinner = true
     }
 
     companion object {

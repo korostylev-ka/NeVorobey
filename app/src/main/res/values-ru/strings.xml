@@ -10,6 +10,10 @@
     <string name="have_current_game">У вас есть незавершенная игра. Хотите начать новую или продолжить?</string>
     <string name="start_new_dialog">Новая игра</string>
     <string name="continue_dialog">Продолжить игру</string>
+    <string name="retry_game">Новая игра</string>
+    <string name="exit_game">Выйти</string>
+    <string name="loose_game">К сожалению, вы проиграли</string>
+    <string name="choose_next_step">Хотите сыграть снова?</string>
     <string name="back_dialog">Назад</string>
     <string name="easy_4">4 буквы</string>
     <string name="medium_5">5 букв</string>

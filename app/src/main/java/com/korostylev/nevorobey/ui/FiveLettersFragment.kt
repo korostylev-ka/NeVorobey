@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.korostylev.nevorobey.R
 import com.korostylev.nevorobey.application.NeVorobeyApplication
 import com.korostylev.nevorobey.databinding.FragmentFiveLettersBinding
@@ -25,9 +26,12 @@ import com.korostylev.nevorobey.dto.Answer
 import com.korostylev.nevorobey.dto.Level
 import com.korostylev.nevorobey.entity.ActiveGameEntity
 import com.korostylev.nevorobey.entity.UsedWordsEntity
+import com.korostylev.nevorobey.model.NeVorobeyModelImpl
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenter
 import com.korostylev.nevorobey.presenter.NeVorobeyPresenterImpl
 import com.korostylev.nevorobey.viewmodel.KeyBoardViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlin.math.E
 
 // TODO: Rename parameter arguments, choose names that match
@@ -163,8 +167,22 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
                 }
             }  else {
                 presenter.deleteWordsFromDB()
+                getWordFromApi()
             }
 
+        } else {
+            presenter.deleteWordsFromDB()
+            getWordFromApi()
+        }
+    }
+
+    private fun getWordFromApi() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val word = viewLifecycleOwner.lifecycleScope.async {
+                presenter.getRandomWord(NeVorobeyModelImpl.MEDIUM_WORD_LENGHT)
+            }.await()
+            val currentGame = ActiveGameEntity(0, true, ActiveGameEntity.MEDIUM, word)
+            presenter.saveCurrentGame(currentGame)
         }
     }
 
@@ -592,6 +610,23 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             it.text = letterFive
         }
         clearInput()
+        val isGameFinished = answer.isGameFinished()
+        val isWinner = answer.isWinner()
+        if (isGameFinished) {
+            Thread.sleep(1000)
+            goToFinishFragment()
+        }
+        if (isWinner) {
+            Thread.sleep(1000)
+            goToFinishFragment()
+        }
+    }
+
+    private fun goToFinishFragment() {
+        val finishFragment = FinishFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, finishFragment, null)
+            .commit()
     }
 
     override fun clearInputFields() {

@@ -10,6 +10,10 @@
     <string name="have_current_game">You have current game. Do you want continue or start new?</string>
     <string name="start_new_dialog">Start new</string>
     <string name="continue_dialog">Continue game</string>
+    <string name="retry_game">Retry game</string>
+    <string name="exit_game">Exit game</string>
+    <string name="loose_game">Unfortunately, you lost</string>
+    <string name="choose_next_step">Do you want play again?</string>
     <string name="back_dialog">Back</string>
     <string name="easy_4">4 letters</string>
     <string name="medium_5">5 letters</string>
