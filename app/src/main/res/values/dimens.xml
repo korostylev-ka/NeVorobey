@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="cell_size_four_letters">56dp</dimen>
+    <dimen name="cell_size_four_letters">52dp</dimen>
     <dimen name="cell_size_five_letters">52dp</dimen>
     <dimen name="cell_size_six_letters">48dp</dimen>
     <dimen name="keyboard_cell_size">28dp</dimen>

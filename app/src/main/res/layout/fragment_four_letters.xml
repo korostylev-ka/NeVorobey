@@ -347,11 +347,10 @@
     </EditText>
     <FrameLayout
         android:id="@+id/keyboard"
-
-        android:layout_marginStart="@dimen/padding"
-        android:layout_marginEnd="@dimen/padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/table_input"
         app:layout_constraintBottom_toTopOf="@id/button_ok">
 

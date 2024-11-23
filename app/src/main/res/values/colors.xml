@@ -11,5 +11,7 @@
     <color name="color_grey">#505050</color>
     <color name="color_red">#FA2A0E</color>
     <color name="color_yellow">#E9ED32</color>
+    <color name="color_smile">#D9B08C</color>
+<!--    <color name="color_smile">#FFC107</color>-->
 
 </resources>
