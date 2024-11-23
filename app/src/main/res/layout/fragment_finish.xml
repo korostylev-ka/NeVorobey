@@ -30,14 +30,25 @@
         android:background="@null"
         android:text="@string/loose_game">
     </TextView>
+    <ImageView
+        android:id="@+id/smile"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintBottom_toBottomOf="@id/choose_next"
+        android:src="@drawable/img_smile_sad_200dp">
+
+    </ImageView>
 
     <TextView
         android:id="@+id/choose_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/common"
-        app:layout_constraintTop_toBottomOf="@id/text"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/smile"
+        app:layout_constraintBottom_toTopOf="@id/try_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
@@ -110,9 +121,5 @@
             android:text="@string/exit_game">
         </TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
