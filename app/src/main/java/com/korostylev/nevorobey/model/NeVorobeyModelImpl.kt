@@ -155,6 +155,15 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
         return theWord
     }
 
+    override suspend fun isWordExist(word: String): Boolean {
+        try {
+            val response = NeVorobeyApi.service.isWordExist(word.lowercase())
+            return response.body()!!
+        } catch (e: Exception) {
+            throw RuntimeException("Error on $e")
+        }
+    }
+
     companion object {
         const val EASY_WORD_LENGHT = 4
         const val MEDIUM_WORD_LENGHT = 5

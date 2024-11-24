@@ -1,10 +1,13 @@
 package com.korostylev.nevorobey.api
 
+import androidx.room.Query
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -17,6 +20,7 @@ class TokenIntercepter: Interceptor {
         val newRequest = chain.request().newBuilder()
 //                server easycalories token
             .addHeader("Authorization", "Token 85b8e4c07d1d75d43937d066591e35d5f5439d38")
+            .addHeader("Content-Type", "application/json; charset=utf-8")
 //                local token
 //            .addHeader("Authorization", "Token 0c5ec45eb189f14d0e748ba4fce532ac692c23bc")
 //          na4.ru token
@@ -39,6 +43,9 @@ private val retrofit = Retrofit.Builder()
 interface APIService {
     @GET("random/{wordSize}")
     suspend fun getRandomWord(@Path("wordSize") wordSize: Int): Response<String>
+
+    @GET("check")
+    suspend fun isWordExist(@retrofit2.http.Query("word") word: String): Response<Boolean>
 
 }
 

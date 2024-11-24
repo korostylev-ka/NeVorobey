@@ -16,6 +16,7 @@
     <string name="win_game">Поздравляем, вы победили!</string>
     <string name="hidden_word">Загаданное слово:</string>
     <string name="choose_next_step">Хотите сыграть снова?</string>
+    <string name="incorrect_word">Введите существительное!</string>
     <string name="back_dialog">Назад</string>
     <string name="easy_4">4 буквы</string>
     <string name="medium_5">5 букв</string>

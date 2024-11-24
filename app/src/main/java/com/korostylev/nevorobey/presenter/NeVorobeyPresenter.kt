@@ -18,4 +18,5 @@ interface NeVorobeyPresenter {
     fun saveCurrentGame(activeGameEntity: ActiveGameEntity)
     fun finishGame()
     suspend fun getRandomWord(wordSize: Int): String
+    suspend fun isWordExist(word: String): Boolean
 }

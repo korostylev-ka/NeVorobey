@@ -19,4 +19,5 @@ interface NeVorobeyModel {
     fun deleteWordsFromDB()
     fun finishGame()
     suspend fun getRandomWord(wordSize: Int): String
+    suspend fun isWordExist(word: String): Boolean
 }

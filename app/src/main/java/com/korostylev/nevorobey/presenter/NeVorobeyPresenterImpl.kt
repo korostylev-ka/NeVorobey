@@ -68,6 +68,10 @@ class NeVorobeyPresenterImpl(private var viewInterface: ViewInterface, val conte
         return model.getRandomWord(wordSize)
     }
 
+    override suspend fun isWordExist(word: String): Boolean {
+        return model.isWordExist(word)
+    }
+
 //    init {
 //        model.saveCurrentGame(ActiveGameEntity(0, true, currentLevel))
 //    }

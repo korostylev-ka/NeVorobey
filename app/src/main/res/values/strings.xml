@@ -16,6 +16,7 @@
     <string name="win_game">Congratulations, you win!</string>
     <string name="hidden_word">The hidden word was:</string>
     <string name="choose_next_step">Do you want play again?</string>
+    <string name="incorrect_word">Incorrect word</string>
     <string name="back_dialog">Back</string>
     <string name="easy_4">4 letters</string>
     <string name="medium_5">5 letters</string>

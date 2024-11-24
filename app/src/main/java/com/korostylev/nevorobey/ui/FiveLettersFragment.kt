@@ -202,10 +202,23 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
     private fun setClickListeners() {
         binding.buttonOk.setOnClickListener {
-            val word = getTheWordFromLetters()
-            val usedWordEntity = UsedWordsEntity(UsedWordsEntity.ID, word)
-            presenter.checkWord(word)
-            presenter.saveWordToDB(usedWordEntity)
+            viewLifecycleOwner.lifecycleScope.launch {
+                val word = getTheWordFromLetters()
+                val usedWordEntity = UsedWordsEntity(UsedWordsEntity.ID, word)
+                try {
+                    val isWordExist = presenter.isWordExist(word)
+                    if (!isWordExist) {
+                        Toast.makeText(requireContext(), R.string.incorrect_word, Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        presenter.checkWord(word)
+                        presenter.saveWordToDB(usedWordEntity)
+                    }
+                } catch (e: Exception) {
+                    presenter.checkWord(word)
+                    presenter.saveWordToDB(usedWordEntity)
+                }
+            }
         }
         binding.buttonCancel.setOnClickListener {
             presenter.clearInputFields()
