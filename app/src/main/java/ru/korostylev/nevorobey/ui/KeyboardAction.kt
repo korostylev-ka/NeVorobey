@@ -1,0 +1,38 @@
+package ru.korostylev.nevorobey.ui
+
+import android.widget.TextView
+
+interface KeyboardAction {
+    fun pressed(text: String)
+//    fun letter1Pressed()
+//    fun letter2Pressed()
+//    fun letter3Pressed()
+//    fun letter4Pressed()
+//    fun letter5Pressed()
+//    fun letter6Pressed()
+//    fun letter7Pressed()
+//    fun letter8Pressed()
+//    fun letter9Pressed()
+//    fun letter10Pressed()
+//    fun letter11Pressed()
+//    fun letter12Pressed()
+//    fun letter13Pressed()
+//    fun letter14Pressed()
+//    fun letter15Pressed()
+//    fun letter16Pressed()
+//    fun letter17Pressed()
+//    fun letter18Pressed()
+//    fun letter19Pressed()
+//    fun letter22Pressed()
+//    fun letter23Pressed()
+//    fun letter24Pressed()
+//    fun letter25Pressed()
+//    fun letter26Pressed()
+//    fun letter27Pressed()
+//    fun letter28Pressed()
+//    fun letter29Pressed()
+//    fun letter30Pressed()
+//    fun letter31Pressed()
+//    fun letter32Pressed()
+//    fun letter33Pressed()
+}

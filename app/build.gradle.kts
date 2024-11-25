@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.korostylev.nevorobey"
+    namespace = "ru.korostylev.nevorobey"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.korostylev.nevorobey"
+        applicationId = "ru.korostylev.nevorobey"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
