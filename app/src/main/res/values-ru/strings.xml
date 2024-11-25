@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Ne Vorobey</string>
+    <string name="app_name">Не воробей</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_letters">Введите буквы</string>
     <string name="enter_all_letters">Введите все буквы</string>
