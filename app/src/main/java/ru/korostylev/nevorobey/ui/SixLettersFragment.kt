@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -629,6 +630,7 @@ class SixLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
     override fun checkWord(answer: Answer) {
         val letters = answer.getLetters()
+        Log.d("nevorobey", letters.toString())
         for (item in letters) {
             if (item != null) {
                 keyBoardViewModel.changeLetterBackground(item.first, item.second)
@@ -669,7 +671,7 @@ class SixLettersFragment : Fragment(), ViewInterface, KeyboardAction {
         }
         currentCell6?.let {
             changeViewBackground(it, answer.getLetters()[5]?.second)
-            it.text = letterFive
+            it.text = letterSix
         }
         clearInput()
         isGameFinished = answer.isGameFinished()
