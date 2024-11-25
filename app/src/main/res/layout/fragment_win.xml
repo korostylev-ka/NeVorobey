@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
         android:background="@null"
-        android:text="@string/loose_game">
+        android:text="@string/win_game">
     </TextView>
     <TextView
         android:id="@+id/word_hidden_description"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common"
-        style="@style/hidden_word_unguessed"
+        style="@style/hidden_word_guessed"
         app:layout_constraintTop_toBottomOf="@id/word_hidden_description"
 
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text"
         app:layout_constraintBottom_toTopOf="@id/word_hidden_description"
-        android:src="@drawable/img_smile_sad_200dp">
+        android:src="@drawable/img_smile_happy_200dp">
 
     </ImageView>
 

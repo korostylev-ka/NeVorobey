@@ -49,6 +49,9 @@ private const val IS_GAME_CONTINUE = "IS_GAME_CONTINUE"
 
 
 class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
+
+    private var isWinner = false
+    private var isGameFinished = false
     private var _binding: FragmentFourLettersBinding? = null
     private val binding: FragmentFourLettersBinding
         get() = _binding ?: throw RuntimeException("FragmentFourLettersBinding is null")
@@ -537,22 +540,46 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             it.text = letterFour
         }
         clearInput()
-        val isGameFinished = answer.isGameFinished()
-        val isWinner = answer.isWinner()
+        isGameFinished = answer.isGameFinished()
+        isWinner = answer.isWinner()
         if (isGameFinished) {
-            Thread.sleep(1000)
-            goToFinishFragment()
+            if (isWinner) {
+                goToWinFragment()
+                presenter.finishGame()
+            } else {
+                goToFinishFragment()
+                presenter.finishGame()
+            }
         }
         if (isWinner) {
-            Thread.sleep(1000)
-            goToFinishFragment()
+            goToWinFragment()
+            presenter.finishGame()
         }
+//        if (isGameFinished && !isWinner) {
+//            Thread.sleep(1000)
+//            goToFinishFragment()
+//            presenter.finishGame()
+//        }
+//        if (isWinner) {
+//            Thread.sleep(1000)
+//            goToWinFragment()
+//            presenter.finishGame()
+//        }
     }
 
     private fun goToFinishFragment() {
-        val finishFragment = FinishFragment.newInstance()
+        val word = presenter.getCurrentGame()!!.theWord
+        val finishFragment = FinishFragment.newInstance(word)
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, finishFragment, null)
+            .commit()
+    }
+
+    private fun goToWinFragment() {
+        val word = presenter.getCurrentGame()!!.theWord
+        val winFragment = WinFragment.newInstance(word)
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, winFragment, null)
             .commit()
     }
 

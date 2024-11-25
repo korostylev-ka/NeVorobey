@@ -13,6 +13,8 @@
     <string name="retry_game">Retry game</string>
     <string name="exit_game">Exit game</string>
     <string name="loose_game">Unfortunately, you lost</string>
+    <string name="win_game">Congratulations, you win!</string>
+    <string name="hidden_word">The hidden word was:</string>
     <string name="choose_next_step">Do you want play again?</string>
     <string name="back_dialog">Back</string>
     <string name="easy_4">4 letters</string>

@@ -7,17 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.korostylev.nevorobey.R
 import com.korostylev.nevorobey.databinding.FragmentFinishBinding
-import com.korostylev.nevorobey.databinding.FragmentStartBinding
+import com.korostylev.nevorobey.databinding.FragmentWinBinding
 
-
-class FinishFragment : Fragment() {
-
+class WinFragment : Fragment() {
     private var hiddenWord: String = ""
 
-    private var _binding: FragmentFinishBinding? = null
-    private val binding: FragmentFinishBinding
-        get() = _binding ?: throw RuntimeException("FragmentFinishBinding is null")
-
+    private var _binding: FragmentWinBinding? = null
+    private val binding: FragmentWinBinding
+        get() = _binding ?: throw RuntimeException("FragmentWinBinding is null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +22,11 @@ class FinishFragment : Fragment() {
             hiddenWord = it.getString(HIDDEN_WORD).toString()
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentFinishBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentWinBinding.inflate(layoutInflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -63,9 +59,10 @@ class FinishFragment : Fragment() {
 
         private const val HIDDEN_WORD = "hidden_word"
 
+        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(word: String) =
-            FinishFragment().apply {
+            WinFragment().apply {
                 arguments = Bundle().apply {
                     putString(HIDDEN_WORD, word)
                 }

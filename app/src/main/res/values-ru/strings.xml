@@ -13,6 +13,8 @@
     <string name="retry_game">Новая игра</string>
     <string name="exit_game">Выйти</string>
     <string name="loose_game">К сожалению, вы проиграли</string>
+    <string name="win_game">Поздравляем, вы победили!</string>
+    <string name="hidden_word">Загаданное слово:</string>
     <string name="choose_next_step">Хотите сыграть снова?</string>
     <string name="back_dialog">Назад</string>
     <string name="easy_4">4 буквы</string>

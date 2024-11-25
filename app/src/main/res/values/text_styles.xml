@@ -45,4 +45,14 @@
         <item name="android:textColor">@color/color_red</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="hidden_word_unguessed" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/color_red</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="hidden_word_guessed" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/color_green</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

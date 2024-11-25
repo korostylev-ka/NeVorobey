@@ -60,6 +60,10 @@ class NeVorobeyPresenterImpl(private var viewInterface: ViewInterface, val conte
         model.saveCurrentGame(activeGameEntity)
     }
 
+    override fun finishGame() {
+        model.finishGame()
+    }
+
     override suspend fun getRandomWord(wordSize: Int): String {
         return model.getRandomWord(wordSize)
     }

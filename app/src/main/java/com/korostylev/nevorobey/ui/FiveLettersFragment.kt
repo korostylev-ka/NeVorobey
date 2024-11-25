@@ -53,6 +53,9 @@ private const val IS_GAME_CONTINUE = "IS_GAME_CONTINUE"
 
 
 class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
+
+    private var isWinner = false
+    private var isGameFinished = false
     private var _binding: FragmentFiveLettersBinding? = null
     private val binding: FragmentFiveLettersBinding
         get() = _binding ?: throw RuntimeException("FragmentFiveLettersBinding is null")
@@ -610,22 +613,33 @@ class FiveLettersFragment : Fragment(), ViewInterface, KeyboardAction {
             it.text = letterFive
         }
         clearInput()
-        val isGameFinished = answer.isGameFinished()
-        val isWinner = answer.isWinner()
-        if (isGameFinished) {
+        isGameFinished = answer.isGameFinished()
+        isWinner = answer.isWinner()
+        if (isGameFinished && !isWinner) {
             Thread.sleep(1000)
             goToFinishFragment()
+            presenter.finishGame()
         }
         if (isWinner) {
             Thread.sleep(1000)
-            goToFinishFragment()
+            goToWinFragment()
+            presenter.finishGame()
         }
     }
 
     private fun goToFinishFragment() {
-        val finishFragment = FinishFragment.newInstance()
+        val word = presenter.getCurrentGame()!!.theWord
+        val finishFragment = FinishFragment.newInstance(word)
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, finishFragment, null)
+            .commit()
+    }
+
+    private fun goToWinFragment() {
+        val word = presenter.getCurrentGame()!!.theWord
+        val winFragment = WinFragment.newInstance(word)
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, winFragment, null)
             .commit()
     }
 

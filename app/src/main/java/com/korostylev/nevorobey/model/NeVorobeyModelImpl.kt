@@ -35,7 +35,8 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
 //        6 -> "БОЛОТО"
 //        else -> ""
 //    }
-    private var theWord = activeGameDao.getCurrentGame()?.theWord ?: throw RuntimeException("There is no word in DB")
+//    private var theWord = activeGameDao.getCurrentGame()?.theWord ?: throw RuntimeException("There is no word in DB")
+    private var theWord = activeGameDao.getCurrentGame()?.theWord ?: EMPTY_WORD
 
 
 
@@ -142,6 +143,11 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
         usedWordsDao.deleteWords()
     }
 
+    override fun finishGame() {
+        usedWordsDao.deleteWords()
+        activeGameDao.finishGame()
+    }
+
     override suspend fun getRandomWord(wordSize: Int): String {
         val response = NeVorobeyApi.service.getRandomWord(wordSize)
         theWord = response.body().toString()
@@ -153,6 +159,7 @@ class NeVorobeyModelImpl(val activeGameDao: ActiveGameDao, val usedWordsDao: Use
         const val EASY_WORD_LENGHT = 4
         const val MEDIUM_WORD_LENGHT = 5
         const val HARD_WORD_LENGHT = 6
+        const val EMPTY_WORD = ""
     }
 
 
