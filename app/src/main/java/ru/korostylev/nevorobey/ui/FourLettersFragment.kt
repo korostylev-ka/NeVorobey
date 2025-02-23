@@ -581,6 +581,7 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
     private fun goToFinishFragment() {
         val word = presenter.getCurrentGame()!!.theWord
+        Log.d("nevorobey", word.toString())
         val finishFragment = FinishFragment.newInstance(word)
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, finishFragment, null)
@@ -589,6 +590,7 @@ class FourLettersFragment : Fragment(), ViewInterface, KeyboardAction {
 
     private fun goToWinFragment() {
         val word = presenter.getCurrentGame()!!.theWord
+        Log.d("nevorobey", word.toString())
         val winFragment = WinFragment.newInstance(word)
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, winFragment, null)
